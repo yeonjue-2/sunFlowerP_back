@@ -38,4 +38,5 @@ out/
 
 
 ### security 정보 ###
-resources/application.yml
+/resources/application
+/resources/static/login

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,7 +40,7 @@ public class User extends Timestamped{
     @Column(nullable = false)
     private String userContents;
 
-    @Column(nullable = true)
+    @Column
     private String kakaoId;
 
 //    @Column(nullable = false)
@@ -48,11 +50,19 @@ public class User extends Timestamped{
     private boolean isMember;
 
 //    @Column(nullable = false)
-//    private boolean isValidMail;
+//    private boolean isActivated;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Post> postList = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "users")
+//    private List<Comment> commentList = new ArrayList<>();
+
+
 
     public User(SignupRequest request, String personalId, String password, String nickname, String email, UserRoleEnum role) {
         this.personalId = personalId;

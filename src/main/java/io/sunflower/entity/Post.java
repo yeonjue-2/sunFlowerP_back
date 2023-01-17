@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Post extends Timestamped{
 
     @Id
-    @Column(name = "POST_ID")
+    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,8 +44,10 @@ public class Post extends Timestamped{
 //    private List<psotImage> postImages = new ArrayList<>();
 //
 
-    @Column(nullable = false)
-    private Long userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
 
     public Post(PostRequest request) {
         this.postContents = request.getPostContents();
