@@ -40,8 +40,5 @@ public class SignupRequest {
 //    private String userImage;
 
     private boolean isMember = true;
-
-    public SignupRequest() {
-    }
 //    private boolean isActivated = true;
 }

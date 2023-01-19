@@ -13,13 +13,11 @@ import java.util.List;
 @Slf4j
 @Service
 public class NutritionService {
-    private static final String KEY_ID = "651efec27e044ae5b36f";
+    private static final String KEY_ID = "SAMPLE";
     private static final String URL = "http://openapi.foodsafetykorea.go.kr/api/" + KEY_ID + "/I2790/json/1/5/DESC_KOR={keyword}";
 
-    public List<NutritionDto> searchNutrition(String keyword) {
+    public List<NutritionDto> searchNutritions(String keyword) {
         RestTemplate rest = new RestTemplate();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("x-api-key", "651efec27e044ae5b36f");
         String body = "";
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body);
@@ -27,7 +25,7 @@ public class NutritionService {
 
         HttpStatus httpStatus = responseEntity.getStatusCode();
         int status = httpStatus.value();
-        log.info("NAVER API Status Code : " + status);
+        // log.info("NAVER API Status Code : " + status);
 
         String response = responseEntity.getBody();
 
@@ -36,8 +34,8 @@ public class NutritionService {
 
     public List<NutritionDto> fromJSONtoItems(String response) {
 
-        JSONObject rjson = new JSONObject(response);
-        JSONArray items  = rjson.getJSONArray("items");
+        JSONObject rjson = new JSONObject(response).getJSONObject("I2790");
+        JSONArray items  = rjson.getJSONArray("row");
         List<NutritionDto> nutritionDtos = new ArrayList<>();
 
         for (int i=0; i<items.length(); i++) {

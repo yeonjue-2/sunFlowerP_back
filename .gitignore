@@ -35,8 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-
-### security 정보 ###
-/resources/application
-/resources/static/login

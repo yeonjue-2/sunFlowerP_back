@@ -18,6 +18,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
 
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,6 +42,8 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/api/user/**").permitAll()
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
+                .antMatchers("/api/search").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin();

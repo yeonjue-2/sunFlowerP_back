@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,7 +43,7 @@ public class Post extends Timestamped{
     private double nuKcal;
 
 //    @Column(nullable = false)
-//    private List<psotImage> postImages = new ArrayList<>();
+//    private List<postImage> postImages = new ArrayList<>();
 //
 
     @JoinColumn(name = "user_id", nullable = false)
@@ -49,7 +51,7 @@ public class Post extends Timestamped{
     private User user;
 
 
-    public Post(PostRequest request) {
+    public Post(PostRequest request, User user) {
         this.postContents = request.getPostContents();
         this.menuList = request.getMenuList();
         this.mealCount = request.getMealCount();
@@ -57,7 +59,7 @@ public class Post extends Timestamped{
         this.nuProtein = request.getNuProtein();
         this.nuFat = request.getNuFat();
         this.nuKcal = request.getNuKcal();
-//        this.userId = userId;
+        this.user = user;
     }
 
 
