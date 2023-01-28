@@ -1,5 +1,7 @@
 package io.sunflower.config;
 
+import io.sunflower.jwt.JwtAuthFilter;
+import io.sunflower.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +10,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
 
+    private final JwtUtil jwtUtil;
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
             "/v2/api-docs",
@@ -41,10 +46,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         http.authorizeRequests().antMatchers("/api/user/**").permitAll()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/api/search").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("api/posts").permitAll()
+                .anyRequest().authenticated()
+                .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin();
 

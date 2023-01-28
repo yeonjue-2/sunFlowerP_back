@@ -1,10 +1,14 @@
 package io.sunflower.entity;
 
 import io.sunflower.dto.request.PostRequest;
+import io.sunflower.dto.request.PostUpdateRequest;
 import io.sunflower.entity.enumeration.MealCountEnum;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +18,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
+@DynamicInsert
 public class Post extends Timestamped{
 
     @Id
@@ -30,17 +35,20 @@ public class Post extends Timestamped{
     @Column(nullable = false)
     private MealCountEnum mealCount;
 
+    @ColumnDefault("0")
     @Column(nullable = false)
-    private double nuCarbs;
+    private String nuCarbs;
+
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private String nuProtein;
+
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private String nuFat;
 
     @Column(nullable = false)
-    private double nuProtein;
-
-    @Column(nullable = false)
-    private double nuFat;
-
-    @Column(nullable = false)
-    private double nuKcal;
+    private String nuKcal;
 
 //    @Column(nullable = false)
 //    private List<postImage> postImages = new ArrayList<>();
@@ -51,7 +59,20 @@ public class Post extends Timestamped{
     private User user;
 
 
-    public Post(PostRequest request, User user) {
+    @Builder
+    public Post(String postContents, String menuList, MealCountEnum mealCount, String nuCarbs,
+                String nuProtein, String nuFat, String nuKcal,User user) {
+        this.postContents = postContents;
+        this.menuList = menuList;
+        this.mealCount = mealCount;
+        this.nuCarbs = nuCarbs;
+        this.nuProtein = nuProtein;
+        this.nuFat = nuFat;
+        this.nuKcal = nuKcal;
+        this.user = user;
+    }
+
+    public void update(PostUpdateRequest request) {
         this.postContents = request.getPostContents();
         this.menuList = request.getMenuList();
         this.mealCount = request.getMealCount();
@@ -59,8 +80,6 @@ public class Post extends Timestamped{
         this.nuProtein = request.getNuProtein();
         this.nuFat = request.getNuFat();
         this.nuKcal = request.getNuKcal();
-        this.user = user;
     }
-
 
 }

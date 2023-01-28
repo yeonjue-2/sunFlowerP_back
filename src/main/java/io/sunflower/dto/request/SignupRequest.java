@@ -1,6 +1,9 @@
 package io.sunflower.dto.request;
 
 import io.sunflower.entity.enumeration.UserGenderEnum;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 

@@ -3,9 +3,12 @@ package io.sunflower.entity;
 import io.sunflower.dto.request.SignupRequest;
 import io.sunflower.entity.enumeration.UserGenderEnum;
 import io.sunflower.entity.enumeration.UserRoleEnum;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity(name = "users")
+@DynamicInsert
 public class User extends Timestamped{
 
     @Id
@@ -37,7 +41,7 @@ public class User extends Timestamped{
     @Column(nullable = false)
     private UserGenderEnum gender;
 
-    @Column(nullable = false)
+    @ColumnDefault("만나서 반갑습니다. 오늘 내가 택한 식단입니다.")
     private String userContents;
 
     @Column
@@ -63,7 +67,7 @@ public class User extends Timestamped{
 //    private List<Comment> commentList = new ArrayList<>();
 
 
-
+    @Builder
     public User(SignupRequest request, String personalId, String password, String nickname, String email, UserRoleEnum role) {
         this.personalId = personalId;
         this.password = password;

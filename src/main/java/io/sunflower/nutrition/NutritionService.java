@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class NutritionService {
-    private static final String KEY_ID = "SAMPLE";
+    private static final String KEY_ID = "651efec27e044ae5b36f";
     private static final String URL = "http://openapi.foodsafetykorea.go.kr/api/" + KEY_ID + "/I2790/json/1/5/DESC_KOR={keyword}";
 
     public List<NutritionDto> searchNutritions(String keyword) {
@@ -25,7 +25,7 @@ public class NutritionService {
 
         HttpStatus httpStatus = responseEntity.getStatusCode();
         int status = httpStatus.value();
-        // log.info("NAVER API Status Code : " + status);
+        // log.info("Nutrition API Status Code : " + status);
 
         String response = responseEntity.getBody();
 
