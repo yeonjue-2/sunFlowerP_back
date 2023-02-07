@@ -1,7 +1,7 @@
 package io.sunflower.security;
 
-import io.sunflower.entity.User;
-import io.sunflower.repository.UserRepository;
+import io.sunflower.user.entity.User;
+import io.sunflower.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
