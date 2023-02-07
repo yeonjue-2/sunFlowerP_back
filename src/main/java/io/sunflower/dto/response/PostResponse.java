@@ -35,6 +35,7 @@ public class PostResponse {
     }
 
     public PostResponse(Post post) {
+        this.postId = post.getId();
         this.postContents = post.getPostContents();
         this.menuList = post.getMenuList();
         this.mealCount = post.getMealCount();
@@ -43,5 +44,6 @@ public class PostResponse {
         this.nuFat = post.getNuFat();
         this.nuKcal = post.getNuKcal();
         this.createAt = post.getCreatedAt();
+        this.nickname = post.getUser().getNickname();
     }
 }

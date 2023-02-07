@@ -49,7 +49,7 @@ public class WebSecurityConfig {
         http.authorizeRequests().antMatchers("/api/user/**").permitAll()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/api/search").permitAll()
-                .antMatchers("api/posts").permitAll()
+                .antMatchers("/api/posts").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

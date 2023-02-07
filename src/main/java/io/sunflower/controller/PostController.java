@@ -29,6 +29,7 @@ public class PostController {
     }
 
 
+    // 포스트 전체 조회
     @GetMapping("/posts/")
     public List<PostResponse> getPosts() {
         return postService.findPosts();
