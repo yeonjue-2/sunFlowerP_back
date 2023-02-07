@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/api/search").permitAll()
                 .antMatchers("/api/posts").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

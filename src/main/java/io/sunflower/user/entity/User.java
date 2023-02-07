@@ -37,15 +37,12 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @ColumnDefault("'MALE'")
     @Enumerated(EnumType.STRING)
     private UserGenderEnum gender;
 
     @ColumnDefault("'만나서 반갑습니다. 오늘 내가 택한 식단입니다.'")
     private String userContents;
-
-    @Column
-    private String kakaoId;
 
 //    @Column(nullable = false)
 //    private String userImage;
@@ -55,6 +52,9 @@ public class User extends Timestamped {
 
 //    @Column(nullable = false)
 //    private boolean isActivated;
+
+    @Column
+    private Long kakaoId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -76,6 +76,20 @@ public class User extends Timestamped {
         this.gender = request.getGender();
         this.userContents = request.getUserContents();
         this.isMember = request.isMember();
+    }
+
+    @Builder
+    public User(Long id, String kakaoEmail, String password, String kakaoNickname, UserRoleEnum role) {
+        this.kakaoId = id;
+        this.emailId = kakaoEmail;
+        this.password = password;
+        this.nickname = kakaoNickname;
+        this.role = role;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
 
