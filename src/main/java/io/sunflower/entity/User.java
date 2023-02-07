@@ -27,7 +27,7 @@ public class User extends Timestamped{
     private Long id;
 
     @Column(nullable = false)
-    private String personalId;
+    private String emailId;
 
     @Column(nullable = false)
     private String password;
@@ -36,12 +36,10 @@ public class User extends Timestamped{
     private String nickname;
 
     @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserGenderEnum gender;
 
-    @ColumnDefault("만나서 반갑습니다. 오늘 내가 택한 식단입니다.")
+    @ColumnDefault("'만나서 반갑습니다. 오늘 내가 택한 식단입니다.'")
     private String userContents;
 
     @Column
@@ -60,7 +58,7 @@ public class User extends Timestamped{
     @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<Post> postList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "users")
@@ -68,11 +66,10 @@ public class User extends Timestamped{
 
 
     @Builder
-    public User(SignupRequest request, String personalId, String password, String nickname, String email, UserRoleEnum role) {
-        this.personalId = personalId;
+    public User(SignupRequest request, String emailId, String password, String nickname, UserRoleEnum role) {
+        this.emailId = emailId;
         this.password = password;
         this.nickname = nickname;
-        this.email = email;
         this.role = role;
         this.gender = request.getGender();
         this.userContents = request.getUserContents();

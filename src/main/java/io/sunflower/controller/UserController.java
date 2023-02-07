@@ -24,12 +24,6 @@ public class UserController {
 //    public ModelAndView signupPage() {
 //        return new ModelAndView("signup");
 //    }
-//
-//    @GetMapping("/login-page")
-//    public ModelAndView loginPage() {
-//        return new ModelAndView("login");
-//    }
-
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequest request) {

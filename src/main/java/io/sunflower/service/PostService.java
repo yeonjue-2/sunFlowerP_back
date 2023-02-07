@@ -25,8 +25,9 @@ public class PostService {
 
     @Transactional
     public PostResponse uploadPost(PostRequest request, User user) {
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         System.out.println("PostService.uploadPost");
-        System.out.println("user.getUsername() = " + user.getPersonalId());
+        System.out.println("user.getUsername() = " + user.getEmailId());
 
         Post post = request.toEntity(user);
         postRepository.save(post);
@@ -58,10 +59,21 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        if (post.getUser().getPersonalId().equals(user.getPersonalId())) {
+        if (post.getUser().getEmailId().equals(user.getEmailId())) {
             post.update(request);
             postRepository.save(post);
             return new PostResponse(post, user);
+        } else {
+            throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
+        }
+    }
+
+    public void removePost(Long postId, User user) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+        if (post.getUser().getEmailId().equals(user.getEmailId())) {
+            postRepository.delete(post);
         } else {
             throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
         }

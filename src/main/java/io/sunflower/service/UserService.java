@@ -25,14 +25,13 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequest request) {
-        String personalId = request.getPersonalId();
+        String emailId = request.getEmailId();
         String password = passwordEncoder.encode(request.getPassword());
         String nickname = request.getNickname();
-        String email = request.getEmail();
 
-        Optional<User> foundById = userRepository.findByPersonalId(personalId);
+        Optional<User> foundById = userRepository.findByEmailId(emailId);
         if (foundById.isPresent()) {
-            throw new IllegalArgumentException("중복된 아이디가 있습니다.");
+            throw new IllegalArgumentException("중복된 이메일이 있습니다.");
         }
 
         Optional<User> foundByNickname = userRepository.findByNickname(nickname);
@@ -40,30 +39,25 @@ public class UserService {
             throw new IllegalArgumentException("중복된 닉네임이 있습니다.");
         }
 
-        Optional<User> foundByEmail = userRepository.findByEmail(email);
-        if (foundByEmail.isPresent()) {
-            throw new IllegalArgumentException("중복된 이메일이 있습니다.");
-        }
-
         UserRoleEnum role = UserRoleEnum.USER;
 
         if (request.isAdmin()) {
             if (!request.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new IllegalArgumentException("관리자 암호가 올바르지 않습니다.");
             }
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(request, personalId, password, nickname, email, role);
+        User user = new User(request, emailId, password, nickname, role);
         userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
     public String login(LoginRequest request) {
-        String personalId = request.getPersonalId();
+        String emailId = request.getEmailId();
         String password = request.getPassword();
 
-        User user = userRepository.findByPersonalId(personalId).orElseThrow(
+        User user = userRepository.findByEmailId(emailId).orElseThrow(
                 () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
         );
 
@@ -73,6 +67,6 @@ public class UserService {
         }
 
         // JWT 활용 시 추가
-        return jwtUtil.createToken(user.getPersonalId(), user.getRole());
+        return jwtUtil.createToken(user.getEmailId(), user.getRole());
     }
 }

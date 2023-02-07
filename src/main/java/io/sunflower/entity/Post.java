@@ -33,6 +33,7 @@ public class Post extends Timestamped{
     private String menuList;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private MealCountEnum mealCount;
 
     @ColumnDefault("0")
@@ -54,7 +55,7 @@ public class Post extends Timestamped{
 //    private List<postImage> postImages = new ArrayList<>();
 //
 
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
