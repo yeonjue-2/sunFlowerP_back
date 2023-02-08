@@ -1,9 +1,11 @@
-package io.sunflower.kakao.dto;
+package io.sunflower.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.kakao.dto.KakaoUserInfo;
+import io.sunflower.kakao.dto.KakaoUserResponse;
 import io.sunflower.security.jwt.JwtUtil;
 import io.sunflower.user.entity.User;
 import io.sunflower.user.repository.UserRepository;
@@ -20,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @Slf4j
@@ -31,7 +34,7 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response) throws IOException {
         // 1. 인가코드로 엑세스 토큰 요청
         String accessToken = getToken(code);
 
@@ -43,6 +46,9 @@ public class KakaoService {
 
         // 4. JWT 토큰 반환
         String createToken = jwtUtil.createToken(kakaoUser.getEmailId(), kakaoUser.getRole());
+
+        // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
+        addToResponse(kakaoUser, response);
 
         return createToken;
     }
@@ -144,5 +150,25 @@ public class KakaoService {
     //                          -> 일반 가입했고 카카오와 이메일이 다른 경우
     // 2. 카카오로 가입한 경우
 
+    // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
+    private void addToResponse(User kakaoUser, HttpServletResponse response) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+
+        KakaoUserResponse kakaoUserResponse = KakaoUserResponse.builder()
+                .emailId(kakaoUser.getEmailId())
+                .password(kakaoUser.getPassword())
+                .nickname(kakaoUser.getNickname())
+                .userContents(kakaoUser.getUserContents())
+                .gender(kakaoUser.getGender())
+                .build();
+
+        String result = objectMapper.writeValueAsString(kakaoUser);
+
+        response.getWriter().write(result);
+    }
 
 }

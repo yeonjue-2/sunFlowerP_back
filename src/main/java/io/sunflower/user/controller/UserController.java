@@ -1,8 +1,6 @@
 package io.sunflower.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.sunflower.kakao.dto.KakaoService;
-import io.sunflower.kakao.dto.KakaoUserAddInfoRequest;
+import io.sunflower.kakao.KakaoService;
 import io.sunflower.user.dto.LoginRequest;
 import io.sunflower.user.dto.SignupRequest;
 import io.sunflower.security.jwt.JwtUtil;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @RestController
@@ -48,24 +47,18 @@ public class UserController {
     /**
      * 카카오에서 주는 인가코드를 받아(controller), 로그인 처리(service)
      * @param code: 카카오 서버로부터 받은 인가 코드
-     * @return redirect url
+     * @return response body에 정보 채워서 전달
      */
     @GetMapping("/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public HttpServletResponse kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
 
         String createToken = kakaoService.kakaoLogin(code, response);
 
         // Cookie 생성 및 직접 브라우저에 Set
         Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));   // 키 , 밸류
-        cookie.setPath("/");
+        cookie.setPath("/");  // 해당 url로 쿠키 전송
         response.addCookie(cookie);
 
-        return "redirect:/api/user/login";
+        return response;
     }
-
-//    // 카카오 가입 뒤 추가 정보 입력
-//    @PostMapping("/kakao/addinfo")
-//    public ResponseEntity<String> addInfo(@RequestBody @Valid KakaoUserAddInfoRequest request) {
-//
-//    }
 }

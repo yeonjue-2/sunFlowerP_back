@@ -37,7 +37,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickname;
 
-    @ColumnDefault("'MALE'")
+    @ColumnDefault("'NONE'")
     @Enumerated(EnumType.STRING)
     private UserGenderEnum gender;
 
@@ -47,7 +47,7 @@ public class User extends Timestamped {
 //    @Column(nullable = false)
 //    private String userImage;
 
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     @Column(nullable = false)
     private boolean isMember;
 
@@ -76,7 +76,6 @@ public class User extends Timestamped {
         this.role = role;
         this.gender = request.getGender();
         this.userContents = request.getUserContents();
-        this.isMember = request.isMember();
     }
 
     @Builder
