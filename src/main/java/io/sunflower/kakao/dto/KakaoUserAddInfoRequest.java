@@ -16,6 +16,6 @@ public class KakaoUserAddInfoRequest {
 
 //    private String userImage;
 
-    private boolean isMember = true;
+    private boolean isMember;
 //    private boolean isActivated = true;
 }

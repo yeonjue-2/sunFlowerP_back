@@ -47,13 +47,14 @@ public class User extends Timestamped {
 //    @Column(nullable = false)
 //    private String userImage;
 
+    @ColumnDefault("false")
     @Column(nullable = false)
     private boolean isMember;
 
 //    @Column(nullable = false)
 //    private boolean isActivated;
 
-    @Column
+    @ColumnDefault("null")
     private Long kakaoId;
 
     @Column(nullable = false)

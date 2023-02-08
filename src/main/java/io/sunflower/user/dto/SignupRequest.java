@@ -34,7 +34,7 @@ public class SignupRequest {
     @Length(max = 100, message = "소개글은 최대 100자까지 작성하실 수 있습니다.")
     private String userContents;
 
-    private String kakaoId = "";
+    private String kakaoId;
     private boolean admin = false;
     private String adminToken = "";
 

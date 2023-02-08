@@ -25,7 +25,7 @@ public class PostRequest {
                 .nuCarbs(this.getNuCarbs())
                 .nuProtein(this.getNuProtein())
                 .nuFat(this.getNuFat())
-                .nuKcal(this.nuKcal)
+                .nuKcal(this.getNuKcal())
                 .user(user)
                 .build();
     }

@@ -44,9 +44,15 @@ public class UserController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+
+    /**
+     * 카카오에서 주는 인가코드를 받아(controller), 로그인 처리(service)
+     * @param code: 카카오 서버로부터 받은 인가 코드
+     * @return redirect url
+     */
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        // code: 카카오 서버로부터 받은 인가 코드
+
         String createToken = kakaoService.kakaoLogin(code, response);
 
         // Cookie 생성 및 직접 브라우저에 Set
