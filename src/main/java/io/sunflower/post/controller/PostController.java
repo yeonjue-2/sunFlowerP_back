@@ -1,7 +1,6 @@
 package io.sunflower.post.controller;
 
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.post.dto.PostUpdateRequest;
 import io.sunflower.post.dto.PostResponse;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.post.service.PostService;
@@ -42,7 +41,7 @@ public class PostController {
 
 
     @PatchMapping("/posts/{postId}")
-    public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest request,
+    public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.modifyPost(postId, request, userDetails.getUser());
     }

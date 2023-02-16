@@ -1,7 +1,6 @@
 package io.sunflower.post.service;
 
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.post.dto.PostUpdateRequest;
 import io.sunflower.post.dto.PostResponse;
 import io.sunflower.post.entity.Post;
 import io.sunflower.user.entity.User;
@@ -51,16 +50,16 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse modifyPost(Long postId, PostUpdateRequest request, User user) {
+    public PostResponse modifyPost(Long postId, PostRequest request, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
-        List<PostUpdateRequest> postUpdateRequests = new ArrayList<>();
-        postUpdateRequests.add(request);
+        List<PostRequest> postRequests = new ArrayList<>();
+        postRequests.add(request);
 
         if (post.getUser().getEmailId().equals(user.getEmailId())) {
-            post.update(postUpdateRequests);
+            post.update(postRequests);
             postRepository.save(post);
             return new PostResponse(post, user);
         } else {

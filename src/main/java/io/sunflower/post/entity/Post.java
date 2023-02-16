@@ -1,6 +1,6 @@
 package io.sunflower.post.entity;
 
-import io.sunflower.post.dto.PostUpdateRequest;
+import io.sunflower.post.dto.PostRequest;
 import io.sunflower.common.model.Timestamped;
 import io.sunflower.user.entity.User;
 import io.sunflower.entity.enumeration.MealCountEnum;
@@ -83,28 +83,28 @@ public class Post extends Timestamped {
 //        this.nuKcal = request.getNuKcal();
 //    }
 
-    public void update(List<PostUpdateRequest> postUpdateRequests) {
-        for (int i = 0; i < postUpdateRequests.size(); i++) {
-            if (postUpdateRequests.get(i).getPostContents() != null) {
-                this.setPostContents(postUpdateRequests.get(i).getPostContents());
+    public void update(List<PostRequest> postRequests) {
+        for (int i = 0; i < postRequests.size(); i++) {
+            if (postRequests.get(i).getPostContents() != null) {
+                this.setPostContents(postRequests.get(i).getPostContents());
             }
-            if (postUpdateRequests.get(i).getMealCount() != null) {
-                this.setMealCount(postUpdateRequests.get(i).getMealCount());
+            if (postRequests.get(i).getMealCount() != null) {
+                this.setMealCount(postRequests.get(i).getMealCount());
             }
-            if (postUpdateRequests.get(i).getMenuList() != null) {
-                this.setMenuList(postUpdateRequests.get(i).getMenuList());
+            if (postRequests.get(i).getMenuList() != null) {
+                this.setMenuList(postRequests.get(i).getMenuList());
             }
-            if (postUpdateRequests.get(i).getNuCarbs() != null) {
-                this.setNuCarbs(postUpdateRequests.get(i).getNuCarbs());
+            if (postRequests.get(i).getNuCarbs() != null) {
+                this.setNuCarbs(postRequests.get(i).getNuCarbs());
             }
-            if (postUpdateRequests.get(i).getNuFat() != null) {
-                this.setNuFat(postUpdateRequests.get(i).getNuFat());
+            if (postRequests.get(i).getNuFat() != null) {
+                this.setNuFat(postRequests.get(i).getNuFat());
             }
-            if (postUpdateRequests.get(i).getNuProtein() != null) {
-                this.setNuProtein(postUpdateRequests.get(i).getNuProtein());
+            if (postRequests.get(i).getNuProtein() != null) {
+                this.setNuProtein(postRequests.get(i).getNuProtein());
             }
-            if (postUpdateRequests.get(i).getNuKcal() != null) {
-                this.setNuKcal(postUpdateRequests.get(i).getNuKcal());
+            if (postRequests.get(i).getNuKcal() != null) {
+                this.setNuKcal(postRequests.get(i).getNuKcal());
             }
         }
     }

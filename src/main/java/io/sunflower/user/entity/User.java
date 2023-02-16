@@ -1,5 +1,6 @@
 package io.sunflower.user.entity;
 
+import io.sunflower.profile.dto.ProfileUpdateRequest;
 import io.sunflower.user.dto.SignupRequest;
 import io.sunflower.common.model.Timestamped;
 import io.sunflower.entity.enumeration.UserGenderEnum;
@@ -94,6 +95,17 @@ public class User extends Timestamped {
     }
 
 
-
-
+    public void updateProfile(List<ProfileUpdateRequest> updateRequests) {
+        for (int i = 0; i < updateRequests.size(); i++) {
+            if (updateRequests.get(i).getNickname() != null) {
+                this.setNickname(updateRequests.get(i).getNickname());
+            }
+            if (updateRequests.get(i).getUserContents() != null) {
+                this.setUserContents(updateRequests.get(i).getUserContents());
+            }
+            if (updateRequests.get(i).getGender() != null) {
+                this.setGender(updateRequests.get(i).getGender());
+            }
+        }
+    }
 }
