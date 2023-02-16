@@ -1,7 +1,5 @@
 package io.sunflower.nutrition;
 
-import io.sunflower.nutrition.NutritionDto;
-import io.sunflower.nutrition.NutritionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +18,11 @@ public class NutritionController {
         return nutritionService.searchNutritions(keyword);
     }
 
-//    @GetMapping("/search")
-//    public NutritionDto searchNutrition(@RequestParam String keyword) {
-//        return nutritionService.searchNutritions(keyword).get(0);
-//    }
+    // 영양성분 단건 조회
+    @GetMapping("/posts/search")
+    public NutritionDto searchNutrition(@RequestParam String keyword) {
+        return nutritionService.searchNutritions(keyword).get(0);
+    }
 }
 
 

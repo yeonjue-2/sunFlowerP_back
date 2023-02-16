@@ -43,20 +43,6 @@ public class PostService {
         return responses;
     }
 
-
-//    public List<PostResponse> findPosts() {
-//        List<PostResponse> responses = new ArrayList<>();
-//        List<Post> posts = postRepository.findAll();
-//
-//        for (Post post : posts) {
-//            User user = post.getUser();
-//            PostResponse response = new PostResponse(post, user);
-//            responses.add(response);
-//        }
-//
-//        return responses;
-//    }
-
     public PostResponse findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         PostResponse response = new PostResponse(post);
@@ -69,13 +55,18 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
+
+        List<PostUpdateRequest> postUpdateRequests = new ArrayList<>();
+        postUpdateRequests.add(request);
+
         if (post.getUser().getEmailId().equals(user.getEmailId())) {
-            post.update(request);
+            post.update(postUpdateRequests);
             postRepository.save(post);
             return new PostResponse(post, user);
         } else {
             throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
         }
+
     }
 
     @Transactional

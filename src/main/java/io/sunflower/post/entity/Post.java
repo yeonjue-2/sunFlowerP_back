@@ -12,6 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -72,14 +73,40 @@ public class Post extends Timestamped {
         this.user = user;
     }
 
-    public void update(PostUpdateRequest request) {
-        this.postContents = request.getPostContents();
-        this.menuList = request.getMenuList();
-        this.mealCount = request.getMealCount();
-        this.nuCarbs = request.getNuCarbs();
-        this.nuProtein = request.getNuProtein();
-        this.nuFat = request.getNuFat();
-        this.nuKcal = request.getNuKcal();
+//    public void update(PostUpdateRequest request) {
+//        this.postContents = request.getPostContents();
+//        this.menuList = request.getMenuList();
+//        this.mealCount = request.getMealCount();
+//        this.nuCarbs = request.getNuCarbs();
+//        this.nuProtein = request.getNuProtein();
+//        this.nuFat = request.getNuFat();
+//        this.nuKcal = request.getNuKcal();
+//    }
+
+    public void update(List<PostUpdateRequest> postUpdateRequests) {
+        for (int i = 0; i < postUpdateRequests.size(); i++) {
+            if (postUpdateRequests.get(i).getPostContents() != null) {
+                this.setPostContents(postUpdateRequests.get(i).getPostContents());
+            }
+            if (postUpdateRequests.get(i).getMealCount() != null) {
+                this.setMealCount(postUpdateRequests.get(i).getMealCount());
+            }
+            if (postUpdateRequests.get(i).getMenuList() != null) {
+                this.setMenuList(postUpdateRequests.get(i).getMenuList());
+            }
+            if (postUpdateRequests.get(i).getNuCarbs() != null) {
+                this.setNuCarbs(postUpdateRequests.get(i).getNuCarbs());
+            }
+            if (postUpdateRequests.get(i).getNuFat() != null) {
+                this.setNuFat(postUpdateRequests.get(i).getNuFat());
+            }
+            if (postUpdateRequests.get(i).getNuProtein() != null) {
+                this.setNuProtein(postUpdateRequests.get(i).getNuProtein());
+            }
+            if (postUpdateRequests.get(i).getNuKcal() != null) {
+                this.setNuKcal(postUpdateRequests.get(i).getNuKcal());
+            }
+        }
     }
 
 }

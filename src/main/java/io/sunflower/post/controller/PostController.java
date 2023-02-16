@@ -30,18 +30,18 @@ public class PostController {
 
     // 포스트 전체 조회
     @GetMapping("/posts/")
-    public List<PostResponse> getPosts() {
+    public List<PostResponse> readPosts() {
         return postService.findPosts();
     }
 
     // 포스트 단건 조회
     @GetMapping("/posts/{postId}")
-    public PostResponse getPost(@PathVariable Long postId) {
+    public PostResponse readPost(@PathVariable Long postId) {
         return postService.findPost(postId);
     }
 
 
-    @PutMapping("/posts/{postId}")
+    @PatchMapping("/posts/{postId}")
     public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest request,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.modifyPost(postId, request, userDetails.getUser());
