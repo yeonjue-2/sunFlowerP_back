@@ -1,4 +1,4 @@
-package io.sunflower.entity.enumeration;
+package io.sunflower.common.enumeration;
 
 public enum UserGenderEnum {
     NONE, MALE, FEMALE;

@@ -1,10 +1,13 @@
 package io.sunflower.auth.controller;
 
+import io.sunflower.auth.dto.LoginResponse;
+import io.sunflower.auth.dto.ReissueResponse;
 import io.sunflower.kakao.KakaoService;
 import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.security.jwt.JwtUtil;
 import io.sunflower.auth.service.AuthService;
+import io.sunflower.security.jwt.TokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
-    private final AuthService userService;
+    private final AuthService authService;
     private final KakaoService kakaoService;
 
 //    @GetMapping("/signup")
@@ -29,18 +32,21 @@ public class AuthController {
 //    }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody @Valid SignupRequest request) {
-        userService.signup(request);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void signup(@RequestBody @Valid SignupRequest request) {
+        authService.signup(request);
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        String token = userService.login(request);
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);      // 헤더에 넣는 작업을 controller에서 처리
+    @ResponseStatus(HttpStatus.CREATED)
+    public LoginResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
+        return authService.login(request, response);
+    }
 
-        return new ResponseEntity<>("Success", HttpStatus.OK);
+    @PostMapping("/reissue")
+    @ResponseStatus(HttpStatus.OK)
+    public ReissueResponse reissue(@RequestBody TokenRequest request, HttpServletResponse response) {
+        return authService.reissue(request, response);
     }
 
 
@@ -50,6 +56,7 @@ public class AuthController {
      * @return response body에 정보 채워서 전달
      */
     @GetMapping("/kakao/callback")
+    @ResponseStatus(HttpStatus.OK)
     public HttpServletResponse kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
 
         String createToken = kakaoService.kakaoLogin(code, response);

@@ -3,7 +3,7 @@ package io.sunflower.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.kakao.dto.KakaoUserInfo;
 import io.sunflower.kakao.dto.KakaoUserResponse;
 import io.sunflower.security.jwt.JwtUtil;

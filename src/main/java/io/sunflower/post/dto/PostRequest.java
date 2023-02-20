@@ -2,7 +2,7 @@ package io.sunflower.post.dto;
 
 import io.sunflower.post.entity.Post;
 import io.sunflower.user.entity.User;
-import io.sunflower.entity.enumeration.MealCountEnum;
+import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.*;
 
 @Getter

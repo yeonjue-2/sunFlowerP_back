@@ -1,4 +1,4 @@
-package io.sunflower.common.model;
+package io.sunflower.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

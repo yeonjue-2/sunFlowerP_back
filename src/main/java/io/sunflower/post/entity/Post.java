@@ -1,9 +1,9 @@
 package io.sunflower.post.entity;
 
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.common.model.Timestamped;
+import io.sunflower.common.Timestamped;
 import io.sunflower.user.entity.User;
-import io.sunflower.entity.enumeration.MealCountEnum;
+import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package io.sunflower.security;
 
 import io.sunflower.user.entity.User;
-import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.common.enumeration.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

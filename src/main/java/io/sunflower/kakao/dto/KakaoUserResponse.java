@@ -1,6 +1,6 @@
 package io.sunflower.kakao.dto;
 
-import io.sunflower.entity.enumeration.UserGenderEnum;
+import io.sunflower.common.enumeration.UserGenderEnum;
 import lombok.Builder;
 import lombok.Getter;
 

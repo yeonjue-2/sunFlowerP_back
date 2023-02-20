@@ -1,6 +1,6 @@
 package io.sunflower.user.dto;
 
-import io.sunflower.entity.enumeration.UserGenderEnum;
+import io.sunflower.common.enumeration.UserGenderEnum;
 import io.sunflower.user.entity.User;
 import lombok.Getter;
 

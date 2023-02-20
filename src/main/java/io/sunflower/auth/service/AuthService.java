@@ -1,20 +1,30 @@
 package io.sunflower.auth.service;
 
 import io.sunflower.auth.dto.LoginRequest;
+import io.sunflower.auth.dto.LoginResponse;
+import io.sunflower.auth.dto.ReissueResponse;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.exception.model.AuthException;
 import io.sunflower.common.exception.model.DuplicatedException;
+import io.sunflower.security.jwt.JwtTokenProvider;
+import io.sunflower.security.jwt.TokenDto;
+import io.sunflower.security.jwt.TokenRequest;
 import io.sunflower.user.entity.User;
-import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.security.jwt.JwtUtil;
 import io.sunflower.user.repository.UserRepository;
 import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static io.sunflower.common.exception.ExceptionStatus.*;
+import static io.sunflower.security.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
+import static io.sunflower.security.jwt.JwtTokenProvider.BEARER_PREFIX;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +32,7 @@ public class AuthService {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -49,18 +59,42 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public String login(LoginRequest request) {
-        String emailId = request.getEmailId();
-        String password = request.getPassword();
+    @Transactional
+    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
+        User user = userService.findUserByEmailId(request.getEmailId());
+        checkPassword(request.getPassword(), user);
 
-        User user = userService.findUserByEmailId(emailId);
-        checkPassword(password, user);
+        Authentication authentication = jwtTokenProvider.createAuthentication(request.getEmailId());
+        TokenDto tokenDto = jwtTokenProvider.createToken(authentication);
 
-        // JWT 활용 시 추가
-        return jwtUtil.createToken(user.getEmailId(), user.getRole());
+        response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
+
+        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(),
+                tokenDto.getRefreshToken());
     }
 
+    @Transactional
+    public ReissueResponse reissue(TokenRequest request, HttpServletResponse response) {
+        String email = jwtTokenProvider.getUserInfoFromToken(request.getAccessToken()).getSubject();
+        validateRefreshToken(request);
+
+        try {
+            Authentication authentication = jwtTokenProvider.createAuthentication(email);
+//            String validRefreshToken = redisUtil.getData(email);
+//            validateRefreshTokenOwner(validRefreshToken, request);
+
+            // 새로운 토큰 발행
+            TokenDto tokenDto = jwtTokenProvider.createToken(authentication);
+//            redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(),
+//                    REFRESH_TOKEN_EXPIRE_TIME);
+            response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
+
+            return ReissueResponse.of(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+        } catch (NullPointerException e) {
+            throw new AuthException(INVALID_REFRESH_TOKEN);
+        }
+
+    }
 
     // ==================== 내부 메서드 ======================
 
@@ -83,6 +117,12 @@ public class AuthService {
     private void checkPassword(String password, User user) {
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw new AuthException(INVALID_EMAIL_OR_PW);
+        }
+    }
+
+    private void validateRefreshToken(TokenRequest request) {
+        if (!jwtTokenProvider.validateToken(request.getRefreshToken())) {
+            throw new AuthException(INVALID_REFRESH_TOKEN);
         }
     }
 

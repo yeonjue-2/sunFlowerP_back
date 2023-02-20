@@ -2,9 +2,9 @@ package io.sunflower.user.entity;
 
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
-import io.sunflower.common.model.Timestamped;
-import io.sunflower.entity.enumeration.UserGenderEnum;
-import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.common.Timestamped;
+import io.sunflower.common.enumeration.UserGenderEnum;
+import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.post.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
