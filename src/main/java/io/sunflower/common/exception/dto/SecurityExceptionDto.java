@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SecurityExceptionDto {
+public class SecurityExceptionDto extends RuntimeException{
 
     private int statusCode;
-    private String msg;
+    private String message;
 
-    public SecurityExceptionDto(int statusCode, String msg) {
+    public SecurityExceptionDto(int statusCode, String message) {
         this.statusCode = statusCode;
-        this.msg = msg;
+        this.message = message;
     }
 }

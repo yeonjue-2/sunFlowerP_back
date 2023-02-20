@@ -1,10 +1,10 @@
-package io.sunflower.user.controller;
+package io.sunflower.auth.controller;
 
 import io.sunflower.kakao.KakaoService;
-import io.sunflower.user.dto.LoginRequest;
-import io.sunflower.user.dto.SignupRequest;
+import io.sunflower.auth.dto.LoginRequest;
+import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.security.jwt.JwtUtil;
-import io.sunflower.user.service.UserService;
+import io.sunflower.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,9 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
-public class UserController {
-    private final UserService userService;
+@RequestMapping("/api/auth")
+public class AuthController {
+    private final AuthService userService;
     private final KakaoService kakaoService;
 
 //    @GetMapping("/signup")

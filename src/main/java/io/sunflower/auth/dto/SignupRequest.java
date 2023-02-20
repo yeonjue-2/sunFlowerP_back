@@ -1,4 +1,4 @@
-package io.sunflower.user.dto;
+package io.sunflower.auth.dto;
 
 import io.sunflower.entity.enumeration.UserGenderEnum;
 import lombok.Getter;

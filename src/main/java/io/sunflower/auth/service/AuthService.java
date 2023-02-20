@@ -1,7 +1,10 @@
-package io.sunflower.user.service;
+package io.sunflower.auth.service;
 
-import io.sunflower.user.dto.LoginRequest;
-import io.sunflower.user.dto.SignupRequest;
+import io.sunflower.auth.dto.LoginRequest;
+import io.sunflower.auth.dto.SignupRequest;
+import io.sunflower.common.exception.ExceptionStatus;
+import io.sunflower.common.exception.dto.AuthException;
+import io.sunflower.common.exception.dto.DuplicatedException;
 import io.sunflower.user.entity.User;
 import io.sunflower.entity.enumeration.UserRoleEnum;
 import io.sunflower.security.jwt.JwtUtil;
@@ -13,9 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static io.sunflower.common.exception.ExceptionStatus.*;
+
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -29,15 +34,8 @@ public class UserService {
         String password = passwordEncoder.encode(request.getPassword());
         String nickname = request.getNickname();
 
-        Optional<User> foundById = userRepository.findByEmailId(emailId);
-        if (foundById.isPresent()) {
-            throw new IllegalArgumentException("중복된 이메일이 있습니다.");
-        }
-
-        Optional<User> foundByNickname = userRepository.findByNickname(nickname);
-        if (foundByNickname.isPresent()) {
-            throw new IllegalArgumentException("중복된 닉네임이 있습니다.");
-        }
+        checkIfUserEmailDuplicated(emailId);
+        checkIfUserNicknameDuplicated(nickname);
 
         UserRoleEnum role = UserRoleEnum.USER;
 
@@ -57,16 +55,41 @@ public class UserService {
         String emailId = request.getEmailId();
         String password = request.getPassword();
 
-        User user = userRepository.findByEmailId(emailId).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-        );
-
-        // 비밀번호 확인, 자동으로 request에서 가져온 password를 변환해서 비교해 줌.
-        if(!passwordEncoder.matches(password, user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
+        User user = findUserByEmailId(emailId);
+        checkPassword(password, user);
 
         // JWT 활용 시 추가
         return jwtUtil.createToken(user.getEmailId(), user.getRole());
     }
+
+
+    // ==================== 내부 메서드 ======================
+
+    /**
+     * 회원가입 시 이메일 중복 확인
+     * @param emailId
+     */
+    private void checkIfUserEmailDuplicated(String emailId) {
+        if (userRepository.existsByEmailId(emailId)) {
+            throw new DuplicatedException(DUPLICATED_EMAIL);
+        }
+    }
+
+    private void checkIfUserNicknameDuplicated(String nickname) {
+        if (userRepository.existsByNickname(nickname)) {
+            throw new DuplicatedException(DUPLICATED_NICKNAME);
+        }
+    }
+
+    private User findUserByEmailId(String emailId) {
+        return userRepository.findByEmailId(emailId).orElseThrow(
+                () -> new AuthException(INVALID_EMAIL_OR_PW));
+    }
+
+    private void checkPassword(String password, User user) {
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new AuthException(INVALID_EMAIL_OR_PW);
+        }
+    }
+
 }

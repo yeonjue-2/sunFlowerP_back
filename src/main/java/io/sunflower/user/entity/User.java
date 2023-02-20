@@ -1,7 +1,7 @@
 package io.sunflower.user.entity;
 
 import io.sunflower.profile.dto.ProfileUpdateRequest;
-import io.sunflower.user.dto.SignupRequest;
+import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.model.Timestamped;
 import io.sunflower.entity.enumeration.UserGenderEnum;
 import io.sunflower.entity.enumeration.UserRoleEnum;
@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
