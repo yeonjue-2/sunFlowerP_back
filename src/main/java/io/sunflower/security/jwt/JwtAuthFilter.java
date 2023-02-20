@@ -2,7 +2,7 @@ package io.sunflower.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
-import io.sunflower.common.exception.dto.SecurityExceptionDto;
+import io.sunflower.common.exception.model.SecurityExceptionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

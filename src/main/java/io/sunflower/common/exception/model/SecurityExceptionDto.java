@@ -1,4 +1,4 @@
-package io.sunflower.common.exception.dto;
+package io.sunflower.common.exception.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

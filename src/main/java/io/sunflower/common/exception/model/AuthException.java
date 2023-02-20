@@ -1,4 +1,4 @@
-package io.sunflower.common.exception.dto;
+package io.sunflower.common.exception.model;
 
 import io.sunflower.common.exception.ExceptionStatus;
 import lombok.Getter;

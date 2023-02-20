@@ -2,19 +2,17 @@ package io.sunflower.auth.service;
 
 import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.SignupRequest;
-import io.sunflower.common.exception.ExceptionStatus;
-import io.sunflower.common.exception.dto.AuthException;
-import io.sunflower.common.exception.dto.DuplicatedException;
+import io.sunflower.common.exception.model.AuthException;
+import io.sunflower.common.exception.model.DuplicatedException;
 import io.sunflower.user.entity.User;
 import io.sunflower.entity.enumeration.UserRoleEnum;
 import io.sunflower.security.jwt.JwtUtil;
 import io.sunflower.user.repository.UserRepository;
+import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
@@ -22,6 +20,7 @@ import static io.sunflower.common.exception.ExceptionStatus.*;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final UserService userService;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
@@ -55,7 +54,7 @@ public class AuthService {
         String emailId = request.getEmailId();
         String password = request.getPassword();
 
-        User user = findUserByEmailId(emailId);
+        User user = userService.findUserByEmailId(emailId);
         checkPassword(password, user);
 
         // JWT 활용 시 추가
@@ -79,11 +78,6 @@ public class AuthService {
         if (userRepository.existsByNickname(nickname)) {
             throw new DuplicatedException(DUPLICATED_NICKNAME);
         }
-    }
-
-    private User findUserByEmailId(String emailId) {
-        return userRepository.findByEmailId(emailId).orElseThrow(
-                () -> new AuthException(INVALID_EMAIL_OR_PW));
     }
 
     private void checkPassword(String password, User user) {

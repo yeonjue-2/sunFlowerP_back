@@ -1,4 +1,4 @@
-package io.sunflower.profile.dto;
+package io.sunflower.user.dto;
 
 import io.sunflower.entity.enumeration.UserGenderEnum;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 @Getter
-public class ProfileUpdateRequest {
+public class UserInfoUpdateRequest {
 
     @NotEmpty(message = "비밀번호는 필수입니다.")
     @Length(min = 8, max = 14, message = "비밀번호는 8 ~ 14자로 설정해 주세요.")

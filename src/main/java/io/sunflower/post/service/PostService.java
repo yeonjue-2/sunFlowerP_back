@@ -1,5 +1,7 @@
 package io.sunflower.post.service;
 
+import io.sunflower.common.exception.model.InvalidAccessException;
+import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostResponse;
 import io.sunflower.post.entity.Post;
@@ -12,22 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.sunflower.common.exception.model.PostException.PostNotFoundException;
+import static io.sunflower.common.exception.ExceptionStatus.*;
 
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
+
     private final PostRepository postRepository;
 
-    @Transactional
-    public PostResponse uploadPost(PostRequest request, User user) {
 
-        Post post = request.toEntity(user);
-        postRepository.save(post);
-
-        return new PostResponse(post, user);
+    public PostResponse findPost(Long postId) {
+        Post post = getPostEntity(postId);
+        return new PostResponse(post);
     }
 
     public List<PostResponse> findPosts() {
@@ -42,18 +42,18 @@ public class PostService {
         return responses;
     }
 
-    public PostResponse findPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        PostResponse response = new PostResponse(post);
+    @Transactional
+    public PostResponse uploadPost(PostRequest request, User user) {
 
-        return response;
+        Post post = request.toEntity(user);
+        postRepository.save(post);
+
+        return new PostResponse(post, user);
     }
 
     @Transactional
     public PostResponse modifyPost(Long postId, PostRequest request, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
+        Post post = getPostEntity(postId);
 
         List<PostRequest> postRequests = new ArrayList<>();
         postRequests.add(request);
@@ -63,20 +63,32 @@ public class PostService {
             postRepository.save(post);
             return new PostResponse(post, user);
         } else {
-            throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
+            throw new InvalidAccessException(NOT_AUTHORIZED_POST);
         }
 
     }
 
     @Transactional
     public void removePost(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
+        Post post = getPostEntity(postId);
+
         if (post.getUser().getEmailId().equals(user.getEmailId())) {
             postRepository.delete(post);
         } else {
-            throw new IllegalArgumentException("접근할 수 있는 권한이 없습니다.");
+            throw new InvalidAccessException(NOT_AUTHORIZED_POST);
         }
+    }
+
+
+    // ==================== 내부 메서드 ======================
+
+    /**
+     * Id를 이용해 Post 객체 찾기
+     * @param postId
+     */
+    private Post getPostEntity(long postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new NotFoundException(NOT_FOUND_POST)
+        );
     }
 }
