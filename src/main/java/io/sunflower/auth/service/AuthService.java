@@ -1,17 +1,18 @@
 package io.sunflower.auth.service;
 
+import io.jsonwebtoken.Claims;
 import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.auth.dto.ReissueResponse;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.exception.model.AuthException;
 import io.sunflower.common.exception.model.DuplicatedException;
+import io.sunflower.common.util.RedisUtil;
 import io.sunflower.security.jwt.JwtTokenProvider;
-import io.sunflower.security.jwt.TokenDto;
-import io.sunflower.security.jwt.TokenRequest;
+import io.sunflower.security.jwt.dto.TokenDto;
+import io.sunflower.security.jwt.dto.TokenRequest;
 import io.sunflower.user.entity.User;
 import io.sunflower.common.enumeration.UserRoleEnum;
-import io.sunflower.security.jwt.JwtUtil;
 import io.sunflower.user.repository.UserRepository;
 import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 
 import static io.sunflower.common.exception.ExceptionStatus.*;
-import static io.sunflower.security.jwt.JwtTokenProvider.AUTHORIZATION_HEADER;
-import static io.sunflower.security.jwt.JwtTokenProvider.BEARER_PREFIX;
+import static io.sunflower.security.jwt.JwtTokenProvider.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +34,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final RedisUtil redisUtil;
 
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
@@ -67,26 +68,31 @@ public class AuthService {
         Authentication authentication = jwtTokenProvider.createAuthentication(request.getEmailId());
         TokenDto tokenDto = jwtTokenProvider.createToken(authentication);
 
+        // Redis - 로그인시 {email: refreshToken} 으로 저장
+        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_TIME);
+
         response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
 
-        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(),
-                tokenDto.getRefreshToken());
+        return new LoginResponse(user.getEmailId(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+
+        // TO-DO
+//        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(),
+//                tokenDto.getRefreshToken());
     }
 
     @Transactional
     public ReissueResponse reissue(TokenRequest request, HttpServletResponse response) {
-        String email = jwtTokenProvider.getUserInfoFromToken(request.getAccessToken()).getSubject();
+        String emailId = jwtTokenProvider.getUserInfoFromToken(request.getAccessToken()).getSubject();
         validateRefreshToken(request);
 
         try {
-            Authentication authentication = jwtTokenProvider.createAuthentication(email);
-//            String validRefreshToken = redisUtil.getData(email);
-//            validateRefreshTokenOwner(validRefreshToken, request);
+            Authentication authentication = jwtTokenProvider.createAuthentication(emailId);
+            String validRefreshToken = redisUtil.getData(emailId);
+            validateRefreshTokenOwner(validRefreshToken, request);
 
             // 새로운 토큰 발행
             TokenDto tokenDto = jwtTokenProvider.createToken(authentication);
-//            redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(),
-//                    REFRESH_TOKEN_EXPIRE_TIME);
+            redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_TIME);
             response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
 
             return ReissueResponse.of(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
@@ -94,6 +100,19 @@ public class AuthService {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
 
+    }
+
+    @Transactional
+    public void logout(TokenRequest request) {
+        if (!jwtTokenProvider.validateToken(request.getAccessToken())) {
+            throw new AuthException(INVALID_ACCESS_TOKEN);
+        }
+
+        Claims claims = jwtTokenProvider.getUserInfoFromToken(request.getAccessToken());
+        String emailId = claims.getSubject();
+        redisUtil.deleteData(emailId);
+
+        redisUtil.setDataExpire("JWT:ATK:" +request.getAccessToken(), "TRUE", ACCESS_TOKEN_TIME / 1000L);
     }
 
     // ==================== 내부 메서드 ======================
@@ -122,6 +141,12 @@ public class AuthService {
 
     private void validateRefreshToken(TokenRequest request) {
         if (!jwtTokenProvider.validateToken(request.getRefreshToken())) {
+            throw new AuthException(INVALID_REFRESH_TOKEN);
+        }
+    }
+
+    private void validateRefreshTokenOwner(String validRefreshToken, TokenRequest request) {
+        if (!request.validateToken(validRefreshToken)) {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
     }

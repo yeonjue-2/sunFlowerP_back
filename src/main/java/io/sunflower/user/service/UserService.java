@@ -22,9 +22,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserInfoResponse modifyUserInfo(String emailId, UserInfoUpdateRequest request, User user) {
+    public UserInfoResponse modifyUserInfo(String nickname, UserInfoUpdateRequest request, User user) {
 
-        User userById = findUserByEmailId(emailId);
+        User userById = findUserByNickname(nickname);
 
         List<UserInfoUpdateRequest> updateRequests = new ArrayList<>();
         updateRequests.add(request);
@@ -50,10 +50,9 @@ public class UserService {
                 () -> new NotFoundException(NOT_FOUND_USER));
     }
 
-
-//    private User findUserById(String emailId) {
-//        return (userRepository.findById(id)).orElseThrow(
-//                () -> new NotFoundException(NOT_FOUND_USER));
-//    }
+    public User findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname).orElseThrow(
+                () -> new NotFoundException(NOT_FOUND_USER));
+    }
 
 }

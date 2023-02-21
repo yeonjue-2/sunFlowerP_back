@@ -3,10 +3,11 @@ package io.sunflower.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.kakao.dto.KakaoUserInfo;
-import io.sunflower.kakao.dto.KakaoUserResponse;
-import io.sunflower.security.jwt.JwtUtil;
+import io.sunflower.security.jwt.JwtTokenProvider;
+import io.sunflower.security.jwt.dto.TokenDto;
 import io.sunflower.user.entity.User;
 import io.sunflower.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +16,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
+
+import static io.sunflower.common.constant.KakaoConstant.CLIENT_ID;
+import static io.sunflower.common.constant.KakaoConstant.REDIRECT_URI;
 
 @Slf4j
 @Service
@@ -32,9 +36,9 @@ public class KakaoService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public String kakaoLogin(String code, HttpServletResponse response) throws IOException {
+    public LoginResponse kakaoLogin(String code) throws IOException {
         // 1. 인가코드로 엑세스 토큰 요청
         String accessToken = getToken(code);
 
@@ -45,12 +49,10 @@ public class KakaoService {
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 토큰 반환
-        String createToken = jwtUtil.createToken(kakaoUser.getEmailId(), kakaoUser.getRole());
+        Authentication authentication = jwtTokenProvider.createAuthentication(kakaoUser.getEmailId());
+        TokenDto tokenDto = jwtTokenProvider.createToken(authentication);
 
-        // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
-        addToResponse(kakaoUser, response);
-
-        return createToken;
+        return LoginResponse.of(kakaoUser.getEmailId(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
     }
 
     // 1. "code"로 "accessToken" 요청
@@ -62,8 +64,8 @@ public class KakaoService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "86483f30e78c6016d89913f11cd358ce");
-        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
+        body.add("client_id", CLIENT_ID);
+        body.add("redirect_uri", REDIRECT_URI);
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -150,25 +152,25 @@ public class KakaoService {
     //                          -> 일반 가입했고 카카오와 이메일이 다른 경우
     // 2. 카카오로 가입한 경우
 
-    // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
-    private void addToResponse(User kakaoUser, HttpServletResponse response) throws IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-
-        KakaoUserResponse kakaoUserResponse = KakaoUserResponse.builder()
-                .emailId(kakaoUser.getEmailId())
-                .password(kakaoUser.getPassword())
-                .nickname(kakaoUser.getNickname())
-                .userContents(kakaoUser.getUserContents())
-                .gender(kakaoUser.getGender())
-                .build();
-
-        String result = objectMapper.writeValueAsString(kakaoUser);
-
-        response.getWriter().write(result);
-    }
+//    // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
+//    private void addToResponse(User kakaoUser, HttpServletResponse response) throws IOException {
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("utf-8");
+//
+//        KakaoUserResponse kakaoUserResponse = KakaoUserResponse.builder()
+//                .emailId(kakaoUser.getEmailId())
+//                .password(kakaoUser.getPassword())
+//                .nickname(kakaoUser.getNickname())
+//                .userContents(kakaoUser.getUserContents())
+//                .gender(kakaoUser.getGender())
+//                .build();
+//
+//        String result = objectMapper.writeValueAsString(kakaoUser);
+//
+//        response.getWriter().write(result);
+//    }
 
 }

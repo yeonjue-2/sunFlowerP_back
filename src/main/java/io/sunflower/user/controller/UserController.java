@@ -16,11 +16,17 @@ public class UserController {
 
     private final UserService userService;
 
-    // 사용자의 프로필 수정
-    @PatchMapping("/{emailId}")
+    /**
+     * 사용자의 프로필 수정
+     * @param nickname
+     * @param request
+     * @param userDetails
+     * @return UserInfoResponse
+     */
+    @PatchMapping("/{nickname}")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserInfoResponse updateUserInfo(@PathVariable String emailId, @RequestBody UserInfoUpdateRequest request,
+    public UserInfoResponse updateUserInfo(@PathVariable String nickname, @RequestBody UserInfoUpdateRequest request,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.modifyUserInfo(emailId, request, userDetails.getUser());
+        return userService.modifyUserInfo(nickname, request, userDetails.getUser());
     }
 }

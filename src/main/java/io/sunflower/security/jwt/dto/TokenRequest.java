@@ -1,4 +1,4 @@
-package io.sunflower.security.jwt;
+package io.sunflower.security.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

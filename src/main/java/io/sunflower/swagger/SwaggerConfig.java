@@ -28,7 +28,7 @@ public class SwaggerConfig {
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .apiInfo(swaggerInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("io.sunflower.controller"))
+                .apis(RequestHandlerSelectors.basePackage("io.sunflower"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false);

@@ -1,5 +1,6 @@
 package io.sunflower.user.entity;
 
+import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.Timestamped;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -21,6 +23,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity(name = "users")
+@DynamicInsert
 @DynamicUpdate
 public class User extends Timestamped {
 
@@ -48,15 +51,19 @@ public class User extends Timestamped {
 //    @Column(nullable = false)
 //    private String userImage;
 
-    @ColumnDefault("true")
-    @Column(nullable = false)
-    private boolean isMember;
+//    @ColumnDefault("true")
+//    @Column(nullable = false)
+//    private boolean isMember;
 
 //    @Column(nullable = false)
 //    private boolean isActivated;
 
     @ColumnDefault("null")
     private Long kakaoId;
+
+    @ColumnDefault("'ACTIVATED'")
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

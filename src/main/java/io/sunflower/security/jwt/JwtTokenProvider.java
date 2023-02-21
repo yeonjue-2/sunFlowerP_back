@@ -2,8 +2,8 @@ package io.sunflower.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.security.UserDetailsServiceImpl;
+import io.sunflower.security.jwt.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +32,8 @@ public class JwtTokenProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;   // 60 * 1000L = 1분
-    private static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24;
+    public static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;   // 60 * 1000L = 1분
+    public static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24;
 
     @Value("${jwt.secret.key}")
     private String secretKey;

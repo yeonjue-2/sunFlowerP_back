@@ -21,41 +21,43 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String token = jwtUtil.resolveToken(request);
+        String token = jwtTokenProvider.resolveToken(request);
 
         if(token != null) {
-            if(!jwtUtil.validateToken(token)){
+            if(!jwtTokenProvider.validateToken(token)){
                 jwtExceptionHandler(response, "Token Error", HttpStatus.UNAUTHORIZED.value());
                 return;
             }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
+            Claims info = jwtTokenProvider.getUserInfoFromToken(token);
             setAuthentication(info.getSubject());
         }
         filterChain.doFilter(request,response);
     }
 
-    public void setAuthentication(String username) {
+    public void setAuthentication(String emailId) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(username);
+        Authentication authentication = jwtTokenProvider.createAuthentication(emailId);
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);
     }
 
-    public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
+    public void jwtExceptionHandler(HttpServletResponse response, String message, int statusCode) {
         response.setStatus(statusCode);
         response.setContentType("application/json");
         try {
-            String json = new ObjectMapper().writeValueAsString(new SecurityExceptionDto(statusCode, msg));
+            String json = new ObjectMapper().writeValueAsString(new SecurityExceptionDto(statusCode, message));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
+
+    // TO-DO SecurityExceptionDto -> ExceptionResponse ?
 
 }
