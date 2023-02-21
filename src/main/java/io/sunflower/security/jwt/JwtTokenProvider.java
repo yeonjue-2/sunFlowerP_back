@@ -23,17 +23,14 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static io.sunflower.common.constant.JwtConstant.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final UserDetailsServiceImpl userDetailsService;
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String AUTHORIZATION_KEY = "auth";
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L;   // 60 * 1000L = 1분
-    public static final long REFRESH_TOKEN_TIME = 60 * 60 * 1000L * 24;
 
     @Value("${jwt.secret.key}")
     private String secretKey;

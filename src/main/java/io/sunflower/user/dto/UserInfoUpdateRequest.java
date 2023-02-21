@@ -7,11 +7,14 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import static io.sunflower.common.constant.UserMessageConst.NECESSARY_PASSWORD;
+import static io.sunflower.common.constant.UserMessageConst.PASSWORD_CONDITION;
+
 @Getter
 public class UserInfoUpdateRequest {
 
-    @NotEmpty(message = "비밀번호는 필수입니다.")
-    @Length(min = 8, max = 14, message = "비밀번호는 8 ~ 14자로 설정해 주세요.")
+    @NotEmpty(message = NECESSARY_PASSWORD)
+    @Length(min = 8, max = 14, message = PASSWORD_CONDITION)
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#$%^&*])[A-Za-z\\d~!@#$%^&*]{8,14}", message = "")
     private String password;
 
@@ -24,7 +27,6 @@ public class UserInfoUpdateRequest {
     private String userContents;
 
     private UserGenderEnum gender;
+    // TO-DO
 //    private String userImage;
-//    private boolean isActivated = true;
-
 }

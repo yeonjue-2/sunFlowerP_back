@@ -55,20 +55,6 @@ public class AuthController {
      * https://kauth.kakao.com/oauth/authorize?client_id=86483f30e78c6016d89913f11cd358ce&
      * redirect_uri=http://localhost:8080/api/auth/kakao/callback&response_type=code
      */
-//    @GetMapping("/kakao/callback")
-//    @ResponseStatus(HttpStatus.OK)
-//    public HttpServletResponse kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-//
-//        String createToken = kakaoService.kakaoLogin(code, response);
-//
-//        // Cookie 생성 및 직접 브라우저에 Set
-//        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, createToken.substring(7));   // 키 , 밸류
-//        cookie.setPath("/");  // 해당 url로 쿠키 전송
-//        response.addCookie(cookie);
-//
-//        return response;
-//    }
-
     @GetMapping("/kakao/callback")
     @ResponseStatus(HttpStatus.OK)
     public LoginResponse kakaoLogin(@RequestParam String code) throws IOException {

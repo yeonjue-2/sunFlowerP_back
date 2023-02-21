@@ -20,7 +20,7 @@ public class SignupRequest {
     private String password;
 
     @NotEmpty(message = "닉네임은 필수입니다.")
-    @Length(min = 2, max = 12, message = "닉네임은 2 ~ 15자로 설정해 주세요.")
+    @Length(min = 2, max = 15, message = "닉네임은 2 ~ 15자로 설정해 주세요.")
     @Pattern(regexp = "^[a-zA-Z0-9-_]*$", message = "한글")
     private String nickname;
 
@@ -32,5 +32,4 @@ public class SignupRequest {
     private String adminToken = "";
 
 //    private String userImage;
-//    private boolean isActivated = true;
 }

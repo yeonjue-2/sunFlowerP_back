@@ -51,13 +51,6 @@ public class User extends Timestamped {
 //    @Column(nullable = false)
 //    private String userImage;
 
-//    @ColumnDefault("true")
-//    @Column(nullable = false)
-//    private boolean isMember;
-
-//    @Column(nullable = false)
-//    private boolean isActivated;
-
     @ColumnDefault("null")
     private Long kakaoId;
 
@@ -100,7 +93,7 @@ public class User extends Timestamped {
         return this;
     }
 
-
+// TO-DO
     public void updateUserInfo(List<UserInfoUpdateRequest> updateRequests) {
         for (int i = 0; i < updateRequests.size(); i++) {
             if (updateRequests.get(i).getNickname() != null) {

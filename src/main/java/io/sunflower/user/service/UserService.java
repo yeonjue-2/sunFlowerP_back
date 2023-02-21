@@ -26,6 +26,7 @@ public class UserService {
 
         User userById = findUserByNickname(nickname);
 
+        // TO-DO
         List<UserInfoUpdateRequest> updateRequests = new ArrayList<>();
         updateRequests.add(request);
 

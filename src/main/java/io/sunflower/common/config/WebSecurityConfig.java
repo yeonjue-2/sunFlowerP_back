@@ -2,7 +2,6 @@ package io.sunflower.common.config;
 
 import io.sunflower.security.jwt.JwtAuthFilter;
 import io.sunflower.security.jwt.JwtTokenProvider;
-import io.sunflower.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

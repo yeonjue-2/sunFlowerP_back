@@ -147,30 +147,4 @@ public class KakaoService {
         }
         return kakaoUser;
     }
-
-    // 1. 카카오로 가입한 적 없는 경우 -> 일반 가입했지만 카카오와 이메일이 같은 경우  -> 카카오로 로그인 가능하게 변경
-    //                          -> 일반 가입했고 카카오와 이메일이 다른 경우
-    // 2. 카카오로 가입한 경우
-
-//    // 5. response에 kakaoUser 정보를 담아 클라이언트에 전송
-//    private void addToResponse(User kakaoUser, HttpServletResponse response) throws IOException {
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("utf-8");
-//
-//        KakaoUserResponse kakaoUserResponse = KakaoUserResponse.builder()
-//                .emailId(kakaoUser.getEmailId())
-//                .password(kakaoUser.getPassword())
-//                .nickname(kakaoUser.getNickname())
-//                .userContents(kakaoUser.getUserContents())
-//                .gender(kakaoUser.getGender())
-//                .build();
-//
-//        String result = objectMapper.writeValueAsString(kakaoUser);
-//
-//        response.getWriter().write(result);
-//    }
-
 }

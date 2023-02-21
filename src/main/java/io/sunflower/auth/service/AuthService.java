@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static io.sunflower.common.constant.JwtConstant.*;
 import static io.sunflower.common.exception.ExceptionStatus.*;
-import static io.sunflower.security.jwt.JwtTokenProvider.*;
 
 @Service
 @RequiredArgsConstructor
