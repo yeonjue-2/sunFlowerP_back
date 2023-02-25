@@ -1,5 +1,6 @@
 package io.sunflower.user.entity;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
@@ -91,17 +92,35 @@ public class User extends TimeStamped {
     }
 
 // TO-DO
-    public void updateUserInfo(List<UserInfoUpdateRequest> updateRequests) {
-        for (int i = 0; i < updateRequests.size(); i++) {
-            if (updateRequests.get(i).getNickname() != null) {
-                this.setNickname(updateRequests.get(i).getNickname());
-            }
-            if (updateRequests.get(i).getUserContents() != null) {
-                this.setUserContents(updateRequests.get(i).getUserContents());
-            }
-            if (updateRequests.get(i).getGender() != null) {
-                this.setGender(updateRequests.get(i).getGender());
-            }
+//    public void updateUserInfo(List<UserInfoUpdateRequest> updateRequests) {
+//        for (int i = 0; i < updateRequests.size(); i++) {
+//            if (updateRequests.get(i).getNickname() != null) {
+//                this.setNickname(updateRequests.get(i).getNickname());
+//            }
+//            if (updateRequests.get(i).getUserContents() != null) {
+//                this.setUserContents(updateRequests.get(i).getUserContents());
+//            }
+//            if (updateRequests.get(i).getGender() != null) {
+//                this.setGender(updateRequests.get(i).getGender());
+//            }
+//        }
+//    }
+
+    public void updateUserInfo(UserInfoUpdateRequest request, String userImageUrl) {
+
+        if (request.getNickname() != null) {
+            this.setNickname(request.getNickname());
         }
+
+        if (request.getUserContents() != null) {
+            this.setUserContents(request.getUserContents());
+        }
+
+        if (request.getGender() != null) {
+            this.setGender(request.getGender());
+        }
+
+        this.setUserImageUrl(userImageUrl);
+
     }
 }

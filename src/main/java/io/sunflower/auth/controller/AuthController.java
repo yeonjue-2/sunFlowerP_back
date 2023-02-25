@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
+
+import static io.sunflower.common.constant.UserConst.*;
 
 
 @RestController
@@ -31,14 +32,11 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@RequestBody @Valid SignupRequest request) {
 
-//        String userImageUrl = "6b6528a3-2396-4126-acfa-8e8f06397a57.png";
-        String userImageUrl;
+        String userImageUrl = DEFAULT_USER_IMAGE;
 
         if (request.getUserImage() != null) {
             s3Uploader.checkFileExtension(request.getUserImage().getOriginalFilename());
-            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "postImage");
-        } else {
-            userImageUrl = "6b6528a3-2396-4126-acfa-8e8f06397a57.png";
+            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "userImage");
         }
 
         authService.signup(userImageUrl, request);

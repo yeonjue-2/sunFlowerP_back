@@ -2,6 +2,7 @@ package io.sunflower.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.sunflower.common.exception.ExceptionStatus;
@@ -55,6 +56,17 @@ public class S3Uploader {
         return getUrls(files, dirName, urls);
     }
 
+    /**
+     * 단일파일 삭제
+     */
+    public void deleteFile(String curFileUrl, String dirName) {
+        String[] split = curFileUrl.split("/");
+        String fileName = dirName + "/" + split[split.length - 1];
+
+        amazonS3Client.deleteObject(bucket, fileName);
+        log.info("delete url : " + fileName);
+    }
+
     // 글 수정 시 기존 s3에 있는 이미지 정보 삭제
     public String deleteForReupload(MultipartFile file, String curFilePath, String imageKey) {
         String fileName = curFilePath + "/" + createFileName(file.getOriginalFilename());
@@ -79,9 +91,7 @@ public class S3Uploader {
     public List<String> reupload(List<MultipartFile> files, String dirName, List<String> imageKeys) {
         List<String> urls = new ArrayList<>();
 
-        for (String imageKey : imageKeys) {
-            amazonS3Client.deleteObject(bucket, imageKey);
-        }
+        deleteImages(imageKeys);
 
         return getUrls(files, dirName, urls);
     }
@@ -118,12 +128,6 @@ public class S3Uploader {
         return urls;
     }
 
-    public void deleteImages(List<String> imageKeys) {
-        for (String imageKey : imageKeys) {
-            amazonS3Client.deleteObject(bucket, imageKey);
-        }
-    }
-
     private String getFileExtension(String fileName) {
         int index = fileName.lastIndexOf(".");
         return fileName.substring(index);
@@ -148,7 +152,7 @@ public class S3Uploader {
     /**
      * 다중 파일 확장자 검사
      */
-    public void checkFilesExtension(List<MultipartFile> files) { // 이 부분 이대로 사용할 것인지, 아니면 수정할 것인지 고민해보기
+    public void checkFilesExtension(List<MultipartFile> files) {
         List<String> extensions = new ArrayList<>();
         boolean result = true;
 
@@ -173,13 +177,19 @@ public class S3Uploader {
 
 
     public void checkFileUpload(List<MultipartFile> files) {
-        checkByFileCount(files); // 파일 갯수 확인
-        checkFilesExtension(files); // 파일 확장자 검사
+        checkByFileCount(files);
+        checkFilesExtension(files);
     }
 
     public void checkByFileCount(List<MultipartFile> files) {
         if (files.size() > 4) {
             throw new FileException(ExceptionStatus.TO_MUCH_FILES);
+        }
+    }
+
+    public void deleteImages(List<String> imageKeys) {
+        for (String imageKey : imageKeys) {
+            amazonS3Client.deleteObject(bucket, imageKey);
         }
     }
 

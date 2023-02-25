@@ -11,12 +11,14 @@ public class UserInfoResponse {
     private String nickname;
     private String userContents;
     private UserGenderEnum gender;
+    private String userImageUrl;
 
     public UserInfoResponse(User user) {
         this.emailId = user.getEmailId();
         this.nickname = user.getNickname();
         this.userContents = user.getUserContents();
         this.gender = user.getGender();
+        this.userImageUrl = user.getUserImageUrl();
     }
 
 }

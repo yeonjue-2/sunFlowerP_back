@@ -3,12 +3,13 @@ package io.sunflower.user.dto;
 import io.sunflower.common.enumeration.UserGenderEnum;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-import static io.sunflower.common.constant.UserMessageConst.NECESSARY_PASSWORD;
-import static io.sunflower.common.constant.UserMessageConst.PASSWORD_CONDITION;
+import static io.sunflower.common.constant.UserConst.NECESSARY_PASSWORD;
+import static io.sunflower.common.constant.UserConst.PASSWORD_CONDITION;
 
 @Getter
 public class UserInfoUpdateRequest {
@@ -27,6 +28,5 @@ public class UserInfoUpdateRequest {
     private String userContents;
 
     private UserGenderEnum gender;
-    // TO-DO
-//    private String userImage;
+    private MultipartFile userImage;
 }

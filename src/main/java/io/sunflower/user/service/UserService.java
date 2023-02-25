@@ -22,16 +22,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserInfoResponse modifyUserInfo(String nickname, UserInfoUpdateRequest request, User user) {
+    public UserInfoResponse modifyUserInfo(String userImageUrl, String nickname, UserInfoUpdateRequest request, User user) {
 
         User userById = findUserByNickname(nickname);
 
-        // TO-DO
-        List<UserInfoUpdateRequest> updateRequests = new ArrayList<>();
-        updateRequests.add(request);
-
         if (userById.getEmailId().equals(user.getEmailId())) {
-            userById.updateUserInfo(updateRequests);
+            userById.updateUserInfo(request, userImageUrl);
             userRepository.save(userById);
             return new UserInfoResponse(userById);
         } else {
