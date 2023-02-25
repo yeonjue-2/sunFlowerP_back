@@ -126,7 +126,7 @@ public class S3Uploader {
 
     private String getFileExtension(String fileName) {
         int index = fileName.lastIndexOf(".");
-        return fileName.substring(index + 1);
+        return fileName.substring(index);
     }
 
     /**
@@ -136,7 +136,7 @@ public class S3Uploader {
         String substring = getFileExtension(fileName);
 
         boolean result = false;
-        if (substring.equals("jpg") || substring.equals("jpeg") || substring.equals("png") || substring.equals("")) {
+        if (substring.equals(".jpg") || substring.equals(".jpeg") || substring.equals(".png") || substring.equals("")) {
             result = true;
         }
 
@@ -159,7 +159,7 @@ public class S3Uploader {
 
         for (String ext : extensions) {
             String extCase = ext.toLowerCase(Locale.ROOT);
-            if (extCase.equals("jpg") || extCase.equals("jpeg") || extCase.equals("png") || extCase.equals("")) {
+            if (extCase.equals(".jpg") || extCase.equals(".jpeg") || extCase.equals(".png") || extCase.equals("")) {
                 result = true;
             } else {
                 result = false;

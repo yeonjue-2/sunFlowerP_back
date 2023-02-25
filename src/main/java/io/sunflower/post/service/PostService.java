@@ -46,7 +46,7 @@ public class PostService {
     public PostResponse savePost(List<String> urls, PostRequest request, User user) {
 
         Post post = request.toEntity(user);
-        
+
         saveImages(urls, post);
         postRepository.save(post);
 

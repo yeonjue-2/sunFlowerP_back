@@ -3,9 +3,11 @@ package io.sunflower.auth.dto;
 import io.sunflower.common.enumeration.UserGenderEnum;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 public class SignupRequest {
@@ -28,8 +30,8 @@ public class SignupRequest {
     private String userContents;
 
     private UserGenderEnum gender;
+    private MultipartFile userImage;
+
     private boolean admin = false;
     private String adminToken = "";
-
-//    private String userImage;
 }

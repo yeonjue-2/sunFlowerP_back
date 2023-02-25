@@ -6,6 +6,7 @@ import io.sunflower.kakao.KakaoService;
 import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.auth.service.AuthService;
+import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.jwt.dto.TokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -23,11 +25,23 @@ public class AuthController {
 
     private final AuthService authService;
     private final KakaoService kakaoService;
+    private final S3Uploader s3Uploader;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@RequestBody @Valid SignupRequest request) {
-        authService.signup(request);
+
+//        String userImageUrl = "6b6528a3-2396-4126-acfa-8e8f06397a57.png";
+        String userImageUrl;
+
+        if (request.getUserImage() != null) {
+            s3Uploader.checkFileExtension(request.getUserImage().getOriginalFilename());
+            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "postImage");
+        } else {
+            userImageUrl = "6b6528a3-2396-4126-acfa-8e8f06397a57.png";
+        }
+
+        authService.signup(userImageUrl, request);
     }
 
     @PostMapping("/login")

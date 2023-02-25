@@ -39,7 +39,7 @@ public class AuthService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional
-    public void signup(SignupRequest request) {
+    public void signup(String userImageUrl, SignupRequest request) {
         String emailId = request.getEmailId();
         String password = passwordEncoder.encode(request.getPassword());
         String nickname = request.getNickname();
@@ -56,7 +56,7 @@ public class AuthService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(request, emailId, password, nickname, role);
+        User user = new User(request, emailId, password, nickname, role, userImageUrl);
         userRepository.save(user);
     }
 

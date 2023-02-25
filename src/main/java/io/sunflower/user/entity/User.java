@@ -1,6 +1,7 @@
 package io.sunflower.user.entity;
 
 import io.sunflower.common.enumeration.UserStatus;
+import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.TimeStamped;
@@ -40,11 +41,11 @@ public class User extends TimeStamped {
     @Enumerated(EnumType.STRING)
     private UserGenderEnum gender;
 
-    @ColumnDefault("'만나서 반갑습니다. 오늘 내가 택한 식단입니다.'")
+    @ColumnDefault("'만나서 반갑습니다. 오늘 내가 택한 식단을 알려드리겠습니다.'")
     private String userContents;
 
-//    @Column(nullable = false)
-//    private String userImage;
+    @Column
+    private String userImageUrl;
 
     @ColumnDefault("null")
     private Long kakaoId;
@@ -65,13 +66,14 @@ public class User extends TimeStamped {
 
 
     @Builder
-    public User(SignupRequest request, String emailId, String password, String nickname, UserRoleEnum role) {
+    public User(SignupRequest request, String emailId, String password, String nickname, UserRoleEnum role, String userImageUrl) {
         this.emailId = emailId;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.gender = request.getGender();
         this.userContents = request.getUserContents();
+        this.userImageUrl = userImageUrl;
     }
 
     @Builder
