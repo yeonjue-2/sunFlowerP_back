@@ -24,17 +24,8 @@ public class PostController {
     private final PostService postService;
     private final S3Uploader s3Uploader;
 
-//    @PostMapping("/posts")
-//    @PreAuthorize("hasRole('ROLE_USER')")
-//    public PostResponse createPost(@RequestPart(required = false, value = "image") List<MultipartFile> files,
-//                                   @RequestPart("dto") @Valid PostRequest request,
-//                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//
-//        return postService.savePost(request, userDetails.getUser());
-//    }
-
-
     @PostMapping("/posts")
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     public PostResponse createPost(@RequestPart(value = "files") List<MultipartFile> files,
                                    @Valid @RequestPart(value = "dto") PostRequest request,
@@ -45,29 +36,34 @@ public class PostController {
         return postService.savePost(urls, request, userDetails.getUser());
     }
 
-    // 포스트 전체 조회
-    @GetMapping("/posts/")
-    public List<PostResponse> readPosts() {
-        return postService.findPosts();
-    }
-
     // 포스트 단건 조회
     @GetMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.OK)
     public PostResponse readPost(@PathVariable Long postId) {
         return postService.findPost(postId);
     }
 
+    // 포스트 전체 조회
+    @GetMapping("/posts/")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> readPosts() {
+        return postService.findPosts();
+    }
 
     @PatchMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.OK)
     public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.modifyPost(postId, request, userDetails.getUser());
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId,
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable Long postId,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String curUserImage = userDetails.getUser().getUserImageUrl();
+        s3Uploader.deleteFile(curUserImage, "userImage");
+
         postService.removePost(postId, userDetails.getUser());
-        return new ResponseEntity<>("delete success", HttpStatus.OK);
     }
 }

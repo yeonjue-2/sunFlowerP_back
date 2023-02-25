@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.common.enumeration.UserRoleEnum;
+import io.sunflower.common.util.RedisUtil;
 import io.sunflower.kakao.dto.KakaoUserInfo;
 import io.sunflower.security.jwt.JwtTokenProvider;
 import io.sunflower.security.jwt.dto.TokenDto;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.UUID;
 
+import static io.sunflower.common.constant.JwtConstant.REFRESH_TOKEN_TIME;
 import static io.sunflower.common.constant.KakaoConstant.CLIENT_ID;
 import static io.sunflower.common.constant.KakaoConstant.REDIRECT_URI;
 
@@ -37,6 +39,7 @@ public class KakaoService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisUtil redisUtil;
 
     public LoginResponse kakaoLogin(String code) throws IOException {
         // 1. 인가코드로 엑세스 토큰 요청
@@ -145,6 +148,11 @@ public class KakaoService {
 
             userRepository.save(kakaoUser);
         }
+
+        // TO-DO
+        // Redis - 로그인시 {email: refreshToken} 으로 저장
+//        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_TIME);
+
         return kakaoUser;
     }
 }

@@ -71,30 +71,55 @@ public class Post extends TimeStamped {
     }
 
 
-    public void update(List<PostRequest> postRequests) {
-        for (int i = 0; i < postRequests.size(); i++) {
-            if (postRequests.get(i).getPostContents() != null) {
-                this.setPostContents(postRequests.get(i).getPostContents());
-            }
-            if (postRequests.get(i).getMealCount() != null) {
-                this.setMealCount(postRequests.get(i).getMealCount());
-            }
-            if (postRequests.get(i).getMenuList() != null) {
-                this.setMenuList(postRequests.get(i).getMenuList());
-            }
-            if (postRequests.get(i).getNuCarbs() != null) {
-                this.setNuCarbs(postRequests.get(i).getNuCarbs());
-            }
-            if (postRequests.get(i).getNuFat() != null) {
-                this.setNuFat(postRequests.get(i).getNuFat());
-            }
-            if (postRequests.get(i).getNuProtein() != null) {
-                this.setNuProtein(postRequests.get(i).getNuProtein());
-            }
-            if (postRequests.get(i).getNuKcal() != null) {
-                this.setNuKcal(postRequests.get(i).getNuKcal());
-            }
+//    public void update(List<PostRequest> postRequests) {
+//        for (int i = 0; i < postRequests.size(); i++) {
+//            if (postRequests.get(i).getPostContents() != null) {
+//                this.setPostContents(postRequests.get(i).getPostContents());
+//            }
+//            if (postRequests.get(i).getMealCount() != null) {
+//                this.setMealCount(postRequests.get(i).getMealCount());
+//            }
+//            if (postRequests.get(i).getMenuList() != null) {
+//                this.setMenuList(postRequests.get(i).getMenuList());
+//            }
+//            if (postRequests.get(i).getNuCarbs() != null) {
+//                this.setNuCarbs(postRequests.get(i).getNuCarbs());
+//            }
+//            if (postRequests.get(i).getNuFat() != null) {
+//                this.setNuFat(postRequests.get(i).getNuFat());
+//            }
+//            if (postRequests.get(i).getNuProtein() != null) {
+//                this.setNuProtein(postRequests.get(i).getNuProtein());
+//            }
+//            if (postRequests.get(i).getNuKcal() != null) {
+//                this.setNuKcal(postRequests.get(i).getNuKcal());
+//            }
+//        }
+//    }
+
+    public void update(PostRequest request) {
+        if (request.getPostContents() != null) {
+            this.setPostContents(request.getPostContents());
         }
+        if (request.getMealCount() != null) {
+            this.setMealCount(request.getMealCount());
+        }
+        if (request.getMenuList() != null) {
+            this.setMenuList(request.getMenuList());
+        }
+        if (request.getNuCarbs() != null) {
+            this.setNuCarbs(request.getNuCarbs());
+        }
+        if (request.getNuProtein() != null) {
+            this.setNuProtein(request.getNuProtein());
+        }
+        if (request.getNuFat() != null) {
+            this.setNuFat(request.getNuFat());
+        }
+        if (request.getNuKcal() != null) {
+            this.setNuKcal(request.getNuKcal());
+        }
+
     }
 
     // 연관 관계 편의 메소드

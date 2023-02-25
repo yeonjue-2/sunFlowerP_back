@@ -57,11 +57,8 @@ public class PostService {
     public PostResponse modifyPost(Long postId, PostRequest request, User user) {
         Post post = getPostEntity(postId);
 
-        List<PostRequest> postRequests = new ArrayList<>();
-        postRequests.add(request);
-
         if (post.getUser().getEmailId().equals(user.getEmailId())) {
-            post.update(postRequests);
+            post.update(request);
             postRepository.save(post);
             return new PostResponse(post, user);
         } else {
@@ -95,7 +92,7 @@ public class PostService {
     }
 
     /**
-     * 이미지 저장 -> 사용처 : createPost, modifyPost
+     * 이미지 저장
      *
      * @param urls
      * @param post

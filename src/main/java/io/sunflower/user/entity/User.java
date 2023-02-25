@@ -91,21 +91,6 @@ public class User extends TimeStamped {
         return this;
     }
 
-// TO-DO
-//    public void updateUserInfo(List<UserInfoUpdateRequest> updateRequests) {
-//        for (int i = 0; i < updateRequests.size(); i++) {
-//            if (updateRequests.get(i).getNickname() != null) {
-//                this.setNickname(updateRequests.get(i).getNickname());
-//            }
-//            if (updateRequests.get(i).getUserContents() != null) {
-//                this.setUserContents(updateRequests.get(i).getUserContents());
-//            }
-//            if (updateRequests.get(i).getGender() != null) {
-//                this.setGender(updateRequests.get(i).getGender());
-//            }
-//        }
-//    }
-
     public void updateUserInfo(UserInfoUpdateRequest request, String userImageUrl) {
 
         if (request.getNickname() != null) {

@@ -56,7 +56,7 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
-    public void signOut(final @RequestBody TokenRequest request) {
+    public void logOut(final @RequestBody TokenRequest request) {
         authService.logout(request);
     }
 
