@@ -3,14 +3,11 @@ package io.sunflower.user.entity;
 import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
-import io.sunflower.common.Timestamped;
+import io.sunflower.common.TimeStamped;
 import io.sunflower.common.enumeration.UserGenderEnum;
 import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.post.entity.Post;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -19,13 +16,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity(name = "users")
 @DynamicInsert
-@DynamicUpdate
-public class User extends Timestamped {
+public class User extends TimeStamped {
 
     @Id
     @Column(name = "user_id")
@@ -63,7 +58,7 @@ public class User extends Timestamped {
     private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user")
-    private List<Post> postList = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "users")
 //    private List<Comment> commentList = new ArrayList<>();

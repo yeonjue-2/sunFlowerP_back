@@ -6,6 +6,8 @@ import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class PostResponse {
@@ -18,6 +20,7 @@ public class PostResponse {
     private String nuFat;
     private String nuKcal;
     private String nickname;
+    private List<String> postImageUrls;
     private LocalDateTime createAt;
 
 
@@ -32,6 +35,9 @@ public class PostResponse {
         this.nuKcal = post.getNuKcal();
         this.createAt = post.getCreatedAt();
         this.nickname = user.getNickname();
+        postImageUrls = post.getPostImages().stream()
+                .map(i -> i.getPostImageUrl())
+                .collect(Collectors.toList());
     }
 
     public PostResponse(Post post) {
@@ -45,5 +51,8 @@ public class PostResponse {
         this.nuKcal = post.getNuKcal();
         this.createAt = post.getCreatedAt();
         this.nickname = post.getUser().getNickname();
+        postImageUrls = post.getPostImages().stream()
+                .map(i -> i.getPostImageUrl())
+                .collect(Collectors.toList());
     }
 }

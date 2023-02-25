@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum ExceptionStatus {
 
     // 400 ->  BAD _ REQUEST : 잘못된 요청 (ex. 파라미터 값을 확인해주세요 )
-    IMAGE_UPLOAD_FAILED(400, "이미지 정상 업로드 실패"),
-    UNSUPPORTED_IMAGE_TYPE(400, "지원하지 않는 이미지 형식"),
+    IMAGE_UPLOAD_FAILED(400, "이미지 업로드에 실패하였습니다."),
+    UNSUPPORTED_IMAGE_TYPE(400, "지원하지 않는 이미지 형식입니다."),
 //    TO_MUCH_INPUTDATAS(400, " 최대 5개의 유형만 설정 할 수 있습니다."),
     TO_MUCH_FILES(400, " 이미지는 최대 5개만 업로드 할 수 있습니다."),
 

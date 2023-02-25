@@ -1,25 +1,23 @@
 package io.sunflower.post.entity;
 
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.common.Timestamped;
+import io.sunflower.common.TimeStamped;
 import io.sunflower.user.entity.User;
 import io.sunflower.common.enumeration.MealCountEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @DynamicInsert
-public class Post extends Timestamped {
+public class Post extends TimeStamped {
 
     @Id
     @Column(name = "post_id")
@@ -51,9 +49,8 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String nuKcal;
 
-//    @Column(nullable = false)
-//    private List<postImage> postImages = new ArrayList<>();
-//
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostImage> postImages = new ArrayList<>();
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -73,15 +70,6 @@ public class Post extends Timestamped {
         this.user = user;
     }
 
-//    public void update(PostUpdateRequest request) {
-//        this.postContents = request.getPostContents();
-//        this.menuList = request.getMenuList();
-//        this.mealCount = request.getMealCount();
-//        this.nuCarbs = request.getNuCarbs();
-//        this.nuProtein = request.getNuProtein();
-//        this.nuFat = request.getNuFat();
-//        this.nuKcal = request.getNuKcal();
-//    }
 
     public void update(List<PostRequest> postRequests) {
         for (int i = 0; i < postRequests.size(); i++) {
@@ -107,6 +95,17 @@ public class Post extends Timestamped {
                 this.setNuKcal(postRequests.get(i).getNuKcal());
             }
         }
+    }
+
+    // 연관 관계 편의 메소드
+    public void addUser(User user) {
+        this.user = user;
+        user.getPosts().add(this);
+    }
+
+    public void addPostImage(PostImage postImage) {
+        postImages.add(postImage);
+        postImage.addPost(this);
     }
 
 }

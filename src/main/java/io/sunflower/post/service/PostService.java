@@ -5,6 +5,7 @@ import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostResponse;
 import io.sunflower.post.entity.Post;
+import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.entity.User;
 import io.sunflower.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,6 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-
     public PostResponse findPost(Long postId) {
         Post post = getPostEntity(postId);
         return new PostResponse(post);
@@ -43,9 +43,11 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse uploadPost(PostRequest request, User user) {
+    public PostResponse savePost(List<String> urls, PostRequest request, User user) {
 
         Post post = request.toEntity(user);
+        
+        saveImages(urls, post);
         postRepository.save(post);
 
         return new PostResponse(post, user);
@@ -90,5 +92,19 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_POST)
         );
+    }
+
+    /**
+     * 이미지 저장 -> 사용처 : createPost, modifyPost
+     *
+     * @param urls
+     * @param post
+     */
+    @Transactional
+    public void saveImages(List<String> urls, Post post) {
+        for (String url : urls) {
+            PostImage postImage = new PostImage(url, post);
+            post.addPostImage(postImage);
+        }
     }
 }

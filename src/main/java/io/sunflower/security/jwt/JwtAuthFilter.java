@@ -3,6 +3,7 @@ package io.sunflower.security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.sunflower.common.exception.model.SecurityExceptionDto;
+import io.sunflower.common.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,18 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisUtil redisUtil;
+    public static final String BLACK_LIST_KEY_PREFIX = "JWT:BLACK_LIST:";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtTokenProvider.resolveToken(request);
+
+        if (redisUtil.hasKey(BLACK_LIST_KEY_PREFIX + token)) {
+            jwtExceptionHandler(response, "BlackList Token", HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
 
         if(token != null) {
             if(!jwtTokenProvider.validateToken(token)){

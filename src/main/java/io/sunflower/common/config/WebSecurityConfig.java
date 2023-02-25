@@ -1,5 +1,6 @@
 package io.sunflower.common.config;
 
+import io.sunflower.common.util.RedisUtil;
 import io.sunflower.security.jwt.JwtAuthFilter;
 import io.sunflower.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisUtil redisUtil;
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
             "/v2/api-docs",
@@ -52,7 +54,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/posts").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
-                .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisUtil), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin();
 
