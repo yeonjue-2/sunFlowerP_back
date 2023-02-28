@@ -12,7 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -70,33 +71,6 @@ public class Post extends TimeStamped {
         this.user = user;
     }
 
-
-//    public void update(List<PostRequest> postRequests) {
-//        for (int i = 0; i < postRequests.size(); i++) {
-//            if (postRequests.get(i).getPostContents() != null) {
-//                this.setPostContents(postRequests.get(i).getPostContents());
-//            }
-//            if (postRequests.get(i).getMealCount() != null) {
-//                this.setMealCount(postRequests.get(i).getMealCount());
-//            }
-//            if (postRequests.get(i).getMenuList() != null) {
-//                this.setMenuList(postRequests.get(i).getMenuList());
-//            }
-//            if (postRequests.get(i).getNuCarbs() != null) {
-//                this.setNuCarbs(postRequests.get(i).getNuCarbs());
-//            }
-//            if (postRequests.get(i).getNuFat() != null) {
-//                this.setNuFat(postRequests.get(i).getNuFat());
-//            }
-//            if (postRequests.get(i).getNuProtein() != null) {
-//                this.setNuProtein(postRequests.get(i).getNuProtein());
-//            }
-//            if (postRequests.get(i).getNuKcal() != null) {
-//                this.setNuKcal(postRequests.get(i).getNuKcal());
-//            }
-//        }
-//    }
-
     public void update(PostRequest request) {
         if (request.getPostContents() != null) {
             this.setPostContents(request.getPostContents());
@@ -123,10 +97,10 @@ public class Post extends TimeStamped {
     }
 
     // 연관 관계 편의 메소드
-    public void addUser(User user) {
-        this.user = user;
-        user.getPosts().add(this);
-    }
+//    public void addUser(User user) {
+//        this.user = user;
+//        user.getPosts().add(this);
+//    }
 
     public void addPostImage(PostImage postImage) {
         postImages.add(postImage);

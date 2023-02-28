@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static io.sunflower.common.constant.UserConst.*;
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")

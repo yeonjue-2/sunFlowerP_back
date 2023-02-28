@@ -1,8 +1,6 @@
 package io.sunflower.user.entity;
 
-import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import io.sunflower.common.enumeration.UserStatus;
-import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.TimeStamped;
@@ -12,13 +10,13 @@ import io.sunflower.post.entity.Post;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity(name = "users")
 @DynamicInsert

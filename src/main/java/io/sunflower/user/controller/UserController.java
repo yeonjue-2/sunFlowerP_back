@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static io.sunflower.common.constant.UserConst.DEFAULT_USER_IMAGE;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
