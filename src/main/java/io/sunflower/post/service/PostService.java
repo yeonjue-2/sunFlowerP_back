@@ -9,6 +9,10 @@ import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.entity.User;
 import io.sunflower.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,16 +34,17 @@ public class PostService {
         return new PostResponse(post);
     }
 
-    public List<PostResponse> findPosts() {
-        List<PostResponse> responses = new ArrayList<>();
-        List<Post> posts = postRepository.findAll();
+    public Slice<PostResponse> findPosts(Pageable pageable) {
+        Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        for (Post post : posts) {
-            PostResponse response = new PostResponse(post);
-            responses.add(response);
-        }
+        return posts.map(PostResponse::new);
+    }
 
-        return responses;
+    public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
+//        Slice<Post> posts = postRepository.findByPostContentsContaining(keyword, pageable);
+        Slice<Post> posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
+
+        return posts.map(PostResponse::new);
     }
 
     @Transactional
@@ -104,4 +109,6 @@ public class PostService {
             post.addPostImage(postImage);
         }
     }
+
+
 }
