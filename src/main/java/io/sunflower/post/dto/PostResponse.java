@@ -1,6 +1,7 @@
 package io.sunflower.post.dto;
 
 import io.sunflower.post.entity.Post;
+import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.entity.User;
 import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class PostResponse {
     private String nuFat;
     private String nuKcal;
     private String nickname;
+    private String userImageUrl;
     private List<String> postImageUrls;
     private LocalDateTime createAt;
 
@@ -35,8 +37,9 @@ public class PostResponse {
         this.nuKcal = post.getNuKcal();
         this.createAt = post.getCreatedAt();
         this.nickname = user.getNickname();
+        this.userImageUrl = user.getUserImageUrl();
         postImageUrls = post.getPostImages().stream()
-                .map(i -> i.getPostImageUrl())
+                .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
     }
 
@@ -52,7 +55,7 @@ public class PostResponse {
         this.createAt = post.getCreatedAt();
         this.nickname = post.getUser().getNickname();
         postImageUrls = post.getPostImages().stream()
-                .map(i -> i.getPostImageUrl())
+                .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
     }
 }

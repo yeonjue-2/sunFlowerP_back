@@ -44,7 +44,7 @@ public class AuthService {
         String password = passwordEncoder.encode(request.getPassword());
         String nickname = request.getNickname();
 
-        checkIfUserEmailDuplicated(emailId);
+        checkIfUserEmailIdDuplicated(emailId);
         checkIfUserNicknameDuplicated(nickname);
 
         UserRoleEnum role = UserRoleEnum.USER;
@@ -121,7 +121,15 @@ public class AuthService {
      * 회원가입 시 이메일 중복 확인
      * @param emailId
      */
-    private void checkIfUserEmailDuplicated(String emailId) {
+    public boolean checkEmailIdDuplicate(String emailId) {
+        return userRepository.existsByEmailId(emailId);
+    }
+
+    public boolean checkNicknameDuplicate(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
+
+    private void checkIfUserEmailIdDuplicated(String emailId) {
         if (userRepository.existsByEmailId(emailId)) {
             throw new DuplicatedException(DUPLICATED_EMAIL);
         }
@@ -133,7 +141,7 @@ public class AuthService {
         }
     }
 
-    private void checkPassword(String password, User user) {
+    public void checkPassword(String password, User user) {
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw new AuthException(INVALID_EMAIL_OR_PW);
         }
@@ -150,5 +158,4 @@ public class AuthService {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
     }
-
 }

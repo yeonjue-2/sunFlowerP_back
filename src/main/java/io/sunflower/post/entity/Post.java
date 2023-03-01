@@ -53,21 +53,21 @@ public class Post extends TimeStamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImage> postImages = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
 
     @Builder
-    public Post(String postContents, String menuList, MealCountEnum mealCount, String nuCarbs,
-                String nuProtein, String nuFat, String nuKcal,User user) {
-        this.postContents = postContents;
-        this.menuList = menuList;
-        this.mealCount = mealCount;
-        this.nuCarbs = nuCarbs;
-        this.nuProtein = nuProtein;
-        this.nuFat = nuFat;
-        this.nuKcal = nuKcal;
+    public Post(PostRequest request, User user) {
+        this.postContents = request.getPostContents();
+        this.menuList = request.getMenuList();
+        this.mealCount = request.getMealCount();
+        this.nuCarbs = request.getNuCarbs();
+        this.nuProtein = request.getNuProtein();
+        this.nuFat = request.getNuFat();
+        this.nuKcal = request.getNuKcal();
         this.user = user;
     }
 

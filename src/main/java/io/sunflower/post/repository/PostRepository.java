@@ -13,6 +13,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Slice<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Slice<Post> findByMenuListContainingOrderByCreatedAtDesc(String keyword, Pageable pageable);
-    Slice<Post> findAllByNickname(String nickname);
 
 }

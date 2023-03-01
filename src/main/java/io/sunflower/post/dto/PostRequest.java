@@ -23,16 +23,16 @@ public class PostRequest {
     private String nuFat;
     private String nuKcal;
 
-    public Post toEntity(User user) {
-        return Post.builder()
-                .postContents(this.getPostContents())
-                .menuList(this.getMenuList())
-                .mealCount(this.getMealCount())
-                .nuCarbs(this.getNuCarbs())
-                .nuProtein(this.getNuProtein())
-                .nuFat(this.getNuFat())
-                .nuKcal(this.getNuKcal())
-                .user(user)
-                .build();
-    }
+//    public Post toEntity(User user) {
+//        return Post.builder()
+//                .postContents(this.getPostContents())
+//                .menuList(this.getMenuList())
+//                .mealCount(this.getMealCount())
+//                .nuCarbs(this.getNuCarbs())
+//                .nuProtein(this.getNuProtein())
+//                .nuFat(this.getNuFat())
+//                .nuKcal(this.getNuKcal())
+//                .user(user)
+//                .build();
+//    }
 }
