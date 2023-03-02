@@ -1,6 +1,5 @@
 package io.sunflower.user.service;
 
-import io.sunflower.auth.service.AuthService;
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.user.dto.UserInfoResponse;

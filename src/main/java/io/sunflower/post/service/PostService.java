@@ -89,7 +89,7 @@ public class PostService {
      * Id를 이용해 Post 객체 찾기
      * @param postId
      */
-    private Post getPostEntity(long postId) {
+    public Post getPostEntity(long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_POST)
         );

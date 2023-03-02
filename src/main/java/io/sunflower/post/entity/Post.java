@@ -1,5 +1,6 @@
 package io.sunflower.post.entity;
 
+import io.sunflower.comment.entity.Comment;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.common.TimeStamped;
 import io.sunflower.user.entity.User;
@@ -16,7 +17,6 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @DynamicInsert
 public class Post extends TimeStamped {
 
@@ -53,6 +53,8 @@ public class Post extends TimeStamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImage> postImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -105,6 +107,11 @@ public class Post extends TimeStamped {
     public void addPostImage(PostImage postImage) {
         postImages.add(postImage);
         postImage.addPost(this);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.addPost(this);
     }
 
 }

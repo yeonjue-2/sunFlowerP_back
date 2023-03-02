@@ -1,7 +1,6 @@
 package io.sunflower.user.entity;
 
 import io.sunflower.common.enumeration.UserStatus;
-import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.common.TimeStamped;
@@ -60,10 +59,6 @@ public class User extends TimeStamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "users")
-//    private List<Comment> commentList = new ArrayList<>();
-
 
     @Builder
     public User(SignupRequest request, String emailId, String password, String nickname, UserRoleEnum role, String userImageUrl) {

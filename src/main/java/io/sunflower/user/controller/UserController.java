@@ -30,6 +30,7 @@ public class UserController {
      * @param userDetails
      * @return UserInfoResponse
      */
+    // TO-DO
 //    @PatchMapping("/{nickname}")
 //    @ResponseStatus(HttpStatus.CREATED)
 //    public UserInfoResponse updateUserInfo(@PathVariable String nickname, @RequestBody UserInfoUpdateRequest request,
