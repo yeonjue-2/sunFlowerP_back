@@ -8,6 +8,8 @@ import io.sunflower.post.entity.Post;
 import io.sunflower.post.service.PostService;
 import io.sunflower.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,12 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new CommentResponse(comment, user);
+        return new CommentResponse(comment);
+    }
+
+    public Slice<CommentResponse> findComments(Long postId, Pageable pageable) {
+        Slice<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId, pageable);
+
+        return comments.map(CommentResponse::new);
     }
 }

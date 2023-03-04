@@ -1,5 +1,6 @@
 package io.sunflower.user.entity;
 
+import io.sunflower.comment.entity.Comment;
 import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;
@@ -111,4 +112,9 @@ public class User extends TimeStamped {
         posts.add(post);
 //        post.addUser(this);
     }
+
+//    public void addComment(Comment comment) {
+//        comments.add(comment);
+////        post.addUser(this);
+//    }
 }

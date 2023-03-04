@@ -1,7 +1,7 @@
 package io.sunflower.post.controller;
 
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.post.dto.PostResponse;
+import io.sunflower.post.dto.PostDetailResponse;
 import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.post.service.PostService;
@@ -30,19 +30,19 @@ public class PostController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public PostResponse createPost(@RequestPart(required = false, value = "files") List<MultipartFile> files,
-                                   @Valid @RequestPart(value = "dto") PostRequest request,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public PostDetailResponse createPost(@RequestPart(required = false, value = "files") List<MultipartFile> files,
+                                         @Valid @RequestPart(value = "dto") PostRequest request,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         s3Uploader.checkFileUpload(files);
         List<String> urls = s3Uploader.uploadFiles(files, "postImage");
         return postService.savePost(urls, request, userDetails.getUser());
     }
 
-    // 포스트 단건 조회
+    // 포스트 단건 조회 및 전체 댓글 조회
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse readPost(@PathVariable Long postId) {
+    public PostDetailResponse readPost(@PathVariable Long postId) {
         return postService.findPost(postId);
     }
 
@@ -53,7 +53,7 @@ public class PostController {
      */
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> readPosts(@PageableDefault(size = 15) Pageable pageable) {
+    public Slice<PostDetailResponse> readPosts(@PageableDefault(size = 15) Pageable pageable) {
         return postService.findPosts(pageable);
     }
 
@@ -63,8 +63,8 @@ public class PostController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
-                                           @RequestParam String keyword) {
+    public Slice<PostDetailResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
+                                                 @RequestParam String keyword) {
         return postService.searchPosts(keyword, pageable);
     }
 
@@ -80,8 +80,8 @@ public class PostController {
 
     @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public PostResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public PostDetailResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.modifyPost(postId, request, userDetails.getUser());
     }
 

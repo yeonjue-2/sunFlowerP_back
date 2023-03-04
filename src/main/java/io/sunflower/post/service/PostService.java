@@ -3,7 +3,7 @@ package io.sunflower.post.service;
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.post.dto.PostRequest;
-import io.sunflower.post.dto.PostResponse;
+import io.sunflower.post.dto.PostDetailResponse;
 import io.sunflower.post.entity.Post;
 import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.entity.User;
@@ -28,25 +28,25 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
 
-    public PostResponse findPost(Long postId) {
+    public PostDetailResponse findPost(Long postId) {
         Post post = getPostEntity(postId);
-        return new PostResponse(post);
+        return new PostDetailResponse(post);
     }
 
-    public Slice<PostResponse> findPosts(Pageable pageable) {
+    public Slice<PostDetailResponse> findPosts(Pageable pageable) {
         Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        return posts.map(PostResponse::new);
+        return posts.map(PostDetailResponse::new);
     }
 
-    public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
+    public Slice<PostDetailResponse> searchPosts(String keyword, Pageable pageable) {
         Slice<Post> posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
 
-        return posts.map(PostResponse::new);
+        return posts.map(PostDetailResponse::new);
     }
 
     @Transactional
-    public PostResponse savePost(List<String> urls, PostRequest request, User user) {
+    public PostDetailResponse savePost(List<String> urls, PostRequest request, User user) {
         Post post = new Post(request, user);
         User userById = userService.findUserByEmailId(user.getEmailId());
 
@@ -54,17 +54,17 @@ public class PostService {
         userById.addPost(post);
         postRepository.save(post);
 
-        return new PostResponse(post, userById);
+        return new PostDetailResponse(post, userById);
     }
 
     @Transactional
-    public PostResponse modifyPost(Long postId, PostRequest request, User user) {
+    public PostDetailResponse modifyPost(Long postId, PostRequest request, User user) {
         Post post = getPostEntity(postId);
 
         if (post.getUser().getEmailId().equals(user.getEmailId())) {
             post.update(request);
             postRepository.save(post);
-            return new PostResponse(post, user);
+            return new PostDetailResponse(post, user);
         } else {
             throw new InvalidAccessException(NOT_AUTHORIZED_POST);
         }
