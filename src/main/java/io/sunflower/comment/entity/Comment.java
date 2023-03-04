@@ -2,6 +2,7 @@ package io.sunflower.comment.entity;
 
 import io.sunflower.comment.dto.CommentRequest;
 import io.sunflower.common.TimeStamped;
+import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.entity.Post;
 import io.sunflower.user.entity.User;
 import lombok.Getter;
@@ -46,4 +47,7 @@ public class Comment extends TimeStamped {
     }
 
 
+    public void update(CommentRequest request) {
+        this.commentContents = request.getCommentContent();
+    }
 }

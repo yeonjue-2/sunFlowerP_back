@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts/{postId}/comments")
+@RequestMapping("/api/posts")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/")
+    @PostMapping("/{postId}/comments/")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponse createComment(@PathVariable Long postId, @RequestBody CommentRequest request,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -30,11 +30,26 @@ public class CommentController {
     /**
      * 포스트 조회 시 전체 댓글 조회
      */
-    @GetMapping("/")
+    @GetMapping("/{postId}/comments/")
     @ResponseStatus(HttpStatus.OK)
     public Slice<CommentResponse> readComments(@PathVariable Long postId,
                                                @PageableDefault(size = 15) Pageable pageable) {
         return commentService.findComments(postId, pageable);
 
+    }
+
+    @PatchMapping("/comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentResponse updateComment(@PathVariable Long commentId, @RequestBody CommentRequest request,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.modifyComment(commentId, request, userDetails.getUser());
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(@PathVariable Long commentId,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        commentService.removeComment(commentId, userDetails.getUser());
     }
 }

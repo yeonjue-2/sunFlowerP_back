@@ -4,6 +4,10 @@ import io.sunflower.comment.dto.CommentRequest;
 import io.sunflower.comment.dto.CommentResponse;
 import io.sunflower.comment.entity.Comment;
 import io.sunflower.comment.repository.CommentRepository;
+import io.sunflower.common.exception.model.InvalidAccessException;
+import io.sunflower.common.exception.model.NotFoundException;
+import io.sunflower.post.dto.PostDetailResponse;
+import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.entity.Post;
 import io.sunflower.post.service.PostService;
 import io.sunflower.user.entity.User;
@@ -12,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static io.sunflower.common.exception.ExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +43,43 @@ public class CommentService {
         Slice<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId, pageable);
 
         return comments.map(CommentResponse::new);
+    }
+
+    @Transactional
+    public CommentResponse modifyComment(Long commentId, CommentRequest request, User user) {
+        Comment comment = getCommentEntity(commentId);
+
+        if (comment.getUser().getEmailId().equals(user.getEmailId())) {
+            comment.update(request);
+            commentRepository.save(comment);
+            return new CommentResponse(comment);
+        } else {
+            throw new InvalidAccessException(NOT_AUTHORIZED_COMMENT);
+        }
+
+    }
+
+    @Transactional
+    public void removeComment(Long commentId, User user) {
+        Comment comment = getCommentEntity(commentId);
+
+        if (comment.getUser().getEmailId().equals(user.getEmailId())) {
+            commentRepository.delete(comment);
+        } else {
+            throw new InvalidAccessException(NOT_AUTHORIZED_COMMENT);
+        }
+    }
+
+
+    // ==================== 내부 메서드 ======================
+
+    /**
+     * Id를 이용해 Comment 객체 찾기
+     * @param commentId
+     */
+    public Comment getCommentEntity(long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(
+                () -> new NotFoundException(NOT_FOUND_COMMENT)
+        );
     }
 }
