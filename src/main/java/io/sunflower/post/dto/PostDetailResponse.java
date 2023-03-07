@@ -1,5 +1,6 @@
 package io.sunflower.post.dto;
 
+import io.sunflower.comment.dto.CommentResponse;
 import io.sunflower.comment.entity.Comment;
 import io.sunflower.post.entity.Post;
 import io.sunflower.post.entity.PostImage;
@@ -24,7 +25,7 @@ public class PostDetailResponse {
     private String nickname;
     private String userImageUrl;
     private List<String> postImageUrls;
-//    private List<Comment> comments;
+    private List<CommentResponse> comments;
     private LocalDateTime createAt;
 
 
@@ -43,9 +44,6 @@ public class PostDetailResponse {
         postImageUrls = post.getPostImages().stream()
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
-//        comments = post.getComments().stream()
-//                .map(Comment::getCommentContents)
-//                .collect(Collectors.toList());
     }
 
     public PostDetailResponse(Post post) {
@@ -62,6 +60,9 @@ public class PostDetailResponse {
         this.userImageUrl = post.getUser().getUserImageUrl();
         postImageUrls = post.getPostImages().stream()
                 .map(PostImage::getPostImageUrl)
+                .collect(Collectors.toList());
+        comments = post.getComments().stream()
+                .map(CommentResponse::new)
                 .collect(Collectors.toList());
     }
 }

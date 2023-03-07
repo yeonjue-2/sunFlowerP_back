@@ -1,7 +1,6 @@
 package io.sunflower.comment.dto;
 
 import io.sunflower.comment.entity.Comment;
-import io.sunflower.user.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
