@@ -1,6 +1,5 @@
 package io.sunflower.user.entity;
 
-import io.sunflower.comment.entity.Comment;
 import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.auth.dto.SignupRequest;

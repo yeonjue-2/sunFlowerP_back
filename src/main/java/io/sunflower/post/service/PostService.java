@@ -2,6 +2,7 @@ package io.sunflower.post.service;
 
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
+import io.sunflower.like.service.LikeService;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostDetailResponse;
 import io.sunflower.post.entity.Post;
@@ -27,10 +28,12 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
+    private final LikeService likeService;
 
     public PostDetailResponse findPost(Long postId) {
         Post post = getPostEntity(postId);
-        return new PostDetailResponse(post);
+        Long likeCount = likeService.findLikeCount(postId);
+        return new PostDetailResponse(post, likeCount);
     }
 
     public Slice<PostDetailResponse> findPosts(Pageable pageable) {
@@ -83,6 +86,7 @@ public class PostService {
     }
 
 
+
     // ==================== 내부 메서드 ======================
 
     /**
@@ -108,6 +112,4 @@ public class PostService {
             post.addPostImage(postImage);
         }
     }
-
-
 }

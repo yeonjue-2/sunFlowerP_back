@@ -10,35 +10,19 @@ public enum ExceptionStatus {
     // 400 ->  BAD _ REQUEST : 잘못된 요청 (ex. 파라미터 값을 확인해주세요 )
     IMAGE_UPLOAD_FAILED(400, "이미지 업로드에 실패하였습니다."),
     UNSUPPORTED_IMAGE_TYPE(400, "지원하지 않는 이미지 형식입니다."),
-//    TO_MUCH_INPUTDATAS(400, " 최대 5개의 유형만 설정 할 수 있습니다."),
-    TO_MUCH_FILES(400, " 이미지는 최대 5개만 업로드 할 수 있습니다."),
+    TO_MUCH_FILES(400, " 이미지는 최대 4개만 업로드 할 수 있습니다."),
 
     // 404 ->  NOT _ FOUND : 잘못된 리소스 접근 (ex. 존재하지 않는 값)
     NOT_FOUND_POST(404, "게시물이 존재하지 않습니다."),
     NOT_FOUND_USER(404, "사용자가 존재하지 않습니다."),
     NOT_FOUND_COMMENT(404, "댓글이 존재하지 않습니다."),
-//    NOT_FOUND_CATEGORY(404, "카테고리가 존재하지 않습니다."),
-
-//    NOT_FOUND_RCMND_POST(404, "해당 게시글 추천 이력이 존재하지 않습니다."),
-//    NOT_FOUND_RCMND_THREAD(404, "해당 쓰레드 추천 이력이 존재하지 않습니다."),
-//    NOT_FOUND_RCMND_COMMENT(404, "해당 댓글 추천 이력이 존재하지 않습니다."),
-
-//    ARCHIVED_THREAD(404, "이미 토론이 종료된 쓰레드입니다."),
-//    NOT_FOUND_OPINION(404, "논제에 등록된 의견이 아닙니다."),
-//    INVALID_ACCESS(404, "잘못된 자원에 대한 접근입니다."),
+    NOT_FOUND_LIKE(404, "해당 게시물에 좋아요를 누르지 않았습니다."),
 
     // 409 ->  CONFLICT : 중복 데이터 (ex. 이미 중복된 값)
     DUPLICATED_USER(409, "이미 등록된 사용자 입니다."),
     DUPLICATED_EMAIL(409, "이미 등록된 이메일 입니다."),
     DUPLICATED_NICKNAME(409, "이미 사용중인 닉네임 입니다."),
-
-//    DUPLICATED_REPORT_POST(409, "이미 해당 게시글 신고 이력이 존재합니다."),
-//    DUPLICATED_REPORT_THREAD(409, "이미 해당 쓰레드 신고 이력이 존재합니다."),
-//    DUPLICATED_REPORT_COMMENT(409, "이미 해당 댓글 신고 이력이 존재합니다."),
-
-    DUPLICATED_RCMND_POST(409, "이미 해당 게시글 추천 이력이 존재합니다."),
-//    DUPLICATED_RCMND_THREAD(409, "이미 해당 쓰레드 추천 이력이 존재합니다."),
-//    DUPLICATED_RCMND_COMMENT(409, "이미 해당 댓글 추천 이력이 존재합니다."),
+    DUPLICATED_LIKE(409, "이미 좋아요를 눌렀습니다."),
 
     // 500 -> INTERNAL SERVER ERROR : 서버에러
     FAIL_TO_POSTING(500, "게시글 작성을 잠시 후 시도해주세요"),

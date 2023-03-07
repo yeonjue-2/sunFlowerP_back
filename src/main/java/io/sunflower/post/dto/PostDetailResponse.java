@@ -26,6 +26,7 @@ public class PostDetailResponse {
     private String userImageUrl;
     private List<String> postImageUrls;
     private List<CommentResponse> comments;
+    private Long likeCount;
     private LocalDateTime createAt;
 
 
@@ -44,6 +45,28 @@ public class PostDetailResponse {
         postImageUrls = post.getPostImages().stream()
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
+    }
+
+    public PostDetailResponse(Post post, Long likeCount) {
+        this.postId = post.getId();
+        this.postContents = post.getPostContents();
+        this.menuList = post.getMenuList();
+        this.mealCount = post.getMealCount();
+        this.nuCarbs = post.getNuCarbs();
+        this.nuProtein = post.getNuProtein();
+        this.nuFat = post.getNuFat();
+        this.nuKcal = post.getNuKcal();
+        this.createAt = post.getCreatedAt();
+        this.nickname = post.getUser().getNickname();
+        this.userImageUrl = post.getUser().getUserImageUrl();
+        postImageUrls = post.getPostImages().stream()
+                .map(PostImage::getPostImageUrl)
+                .collect(Collectors.toList());
+        comments = post.getComments().stream()
+                .map(CommentResponse::new)
+                .collect(Collectors.toList());
+        this.likeCount = likeCount;
+
     }
 
     public PostDetailResponse(Post post) {

@@ -68,15 +68,20 @@ public class PostController {
         return postService.searchPosts(keyword, pageable);
     }
 
-//    /**
-//     * 해당 유저의 포스트만 조회
-//     */
-//    @GetMapping("/search/{nickname}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public Slice<PostResponse> findPostsByUser(@PageableDefault(size = 15) Pageable pageable,
-//                                                 @PathVariable String nickname) {
-//        return postService.findPostsByUser(nickname, pageable);
-//    }
+    @PatchMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PostDetailResponse updatePost(@PathVariable Long postId, @RequestBody PostRequest request,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.modifyPost(postId, request, userDetails.getUser());
+    }
 
+    @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable Long postId,
+                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String curUserImage = userDetails.getUser().getUserImageUrl();
+        s3Uploader.deleteFile(curUserImage, "userImage");
 
+        postService.removePost(postId, userDetails.getUser());
+    }
 }
