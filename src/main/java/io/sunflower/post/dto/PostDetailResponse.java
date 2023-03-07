@@ -59,6 +59,7 @@ public class PostDetailResponse {
         this.nuKcal = post.getNuKcal();
         this.createAt = post.getCreatedAt();
         this.nickname = post.getUser().getNickname();
+        this.userImageUrl = post.getUser().getUserImageUrl();
         postImageUrls = post.getPostImages().stream()
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());

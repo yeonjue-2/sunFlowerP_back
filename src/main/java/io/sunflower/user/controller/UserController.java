@@ -1,9 +1,10 @@
 package io.sunflower.user.controller;
 
 import io.sunflower.s3.S3Uploader;
-import io.sunflower.user.dto.UserInfoResponse;
+import io.sunflower.user.dto.UserInfoUpdateResponse;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import io.sunflower.security.UserDetailsImpl;
+import io.sunflower.user.dto.UserModalInfoResponse;
 import io.sunflower.user.dto.UserProfileResponse;
 import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +50,8 @@ public class UserController {
 
     @PatchMapping("/{nickname}")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserInfoResponse updateUserInfo(@PathVariable String nickname, @RequestBody UserInfoUpdateRequest request,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public UserInfoUpdateResponse updateUserInfo(@PathVariable String nickname, @RequestBody UserInfoUpdateRequest request,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userImageUrl = DEFAULT_USER_IMAGE;
         String curUserImage = userDetails.getUser().getUserImageUrl();
 

@@ -5,7 +5,7 @@ import io.sunflower.user.entity.User;
 import lombok.Getter;
 
 @Getter
-public class UserInfoResponse {
+public class UserInfoUpdateResponse {
 
     private String emailId;
     private String nickname;
@@ -13,7 +13,7 @@ public class UserInfoResponse {
     private UserGenderEnum gender;
     private String userImageUrl;
 
-    public UserInfoResponse(User user) {
+    public UserInfoUpdateResponse(User user) {
         this.emailId = user.getEmailId();
         this.nickname = user.getNickname();
         this.userContents = user.getUserContents();

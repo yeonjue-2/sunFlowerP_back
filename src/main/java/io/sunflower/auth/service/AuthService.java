@@ -49,6 +49,7 @@ public class AuthService {
 
         UserRoleEnum role = UserRoleEnum.USER;
 
+        // TO-DO
         if (request.isAdmin()) {
             if (!request.getAdminToken().equals(ADMIN_TOKEN)) {
                 throw new IllegalArgumentException("관리자 암호가 올바르지 않습니다.");

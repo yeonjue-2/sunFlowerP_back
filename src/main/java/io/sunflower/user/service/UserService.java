@@ -2,8 +2,9 @@ package io.sunflower.user.service;
 
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
-import io.sunflower.user.dto.UserInfoResponse;
+import io.sunflower.user.dto.UserInfoUpdateResponse;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
+import io.sunflower.user.dto.UserModalInfoResponse;
 import io.sunflower.user.dto.UserProfileResponse;
 import io.sunflower.user.entity.User;
 import io.sunflower.user.repository.UserRepository;
@@ -26,8 +27,13 @@ public class UserService {
         return new UserProfileResponse(userById);
     }
 
+    public UserModalInfoResponse findUserInModal(String nickname) {
+        User userById = findUserByNickname(nickname);
+        return new UserModalInfoResponse(userById);
+    }
+
     @Transactional
-    public UserInfoResponse modifyUserInfo(String userImageUrl, String nickname, UserInfoUpdateRequest request, User user) {
+    public UserInfoUpdateResponse modifyUserInfo(String userImageUrl, String nickname, UserInfoUpdateRequest request, User user) {
 
         User userById = findUserByNickname(nickname);
 
@@ -39,7 +45,7 @@ public class UserService {
         if (userById.getEmailId().equals(user.getEmailId())) {
             userById.updateUserInfo(request, password, userImageUrl);
             userRepository.save(userById);
-            return new UserInfoResponse(userById);
+            return new UserInfoUpdateResponse(userById);
         } else {
             throw new InvalidAccessException(NOT_AUTHORIZED_USER);
         }
@@ -61,5 +67,4 @@ public class UserService {
         return userRepository.findByNickname(nickname).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_USER));
     }
-
 }
