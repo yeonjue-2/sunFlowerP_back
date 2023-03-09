@@ -58,7 +58,7 @@ public class LikeService {
     }
 
     private void validateLike(Long postId, User user) {
-        if (likeRepository.existsBypostIdAndUserId(postId, user.getId())) {
+        if (likeRepository.existsByPostIdAndUserId(postId, user.getId())) {
             throw new DuplicatedException(DUPLICATED_LIKE);
         }
     }

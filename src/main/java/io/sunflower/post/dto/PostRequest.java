@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
+@Setter
 public class PostRequest {
 
     @Length(max=255)
@@ -22,6 +23,9 @@ public class PostRequest {
     private String nuProtein;
     private String nuFat;
     private String nuKcal;
+
+    @Size(max=4, message = "* 이미지는 최대 4장까지 업로드 가능합니다.")
+    private List<MultipartFile> files;
 
 //    public Post toEntity(User user) {
 //        return Post.builder()

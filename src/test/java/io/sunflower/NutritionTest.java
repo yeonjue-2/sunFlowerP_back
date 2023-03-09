@@ -1,7 +1,7 @@
 package io.sunflower;
 
-import io.sunflower.nutrition.NutritionDto;
-import io.sunflower.nutrition.NutritionService;
+import io.sunflower.nutrition.dto.NutritionDto;
+import io.sunflower.nutrition.service.NutritionService;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

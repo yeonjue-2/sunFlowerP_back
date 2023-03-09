@@ -16,7 +16,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
@@ -39,13 +41,29 @@ public class PostService {
     public Slice<PostDetailResponse> findPosts(Pageable pageable) {
         Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
 
-        return posts.map(PostDetailResponse::new);
+        return posts.map(post -> makePostDetailResponse(post, post.getId()));
+    }
+
+    private PostDetailResponse makePostDetailResponse(Post post, Long postId) {
+        Long likeCount = likeService.findLikeCount(postId);
+        return new PostDetailResponse(post, likeCount);
     }
 
     public Slice<PostDetailResponse> searchPosts(String keyword, Pageable pageable) {
         Slice<Post> posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
 
-        return posts.map(PostDetailResponse::new);
+//        return posts.map(PostDetailResponse::new);
+//          return posts.map(o -> {
+//                      Long likeCount = likeService.findLikeCount(o.getId());
+//                      (o, likeCount) -> new PostDetailResponse(o, likeCount);
+//                  });
+
+        return posts.map(o -> {
+            Long likeCount = likeService.findLikeCount(o.getId());
+            new PostDetailResponse(o, likeCount);
+
+            return null;
+        });
     }
 
     @Transactional

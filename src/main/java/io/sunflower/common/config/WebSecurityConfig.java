@@ -48,17 +48,17 @@ public class WebSecurityConfig {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/api/user/**").permitAll()
-                .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .antMatchers("/api/search").permitAll()
-                .antMatchers("/api/posts").permitAll()
+        http.authorizeRequests().antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/posts").permitAll()
+                .antMatchers("/users").permitAll()
+                .antMatchers("/search-nutritions").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisUtil), UsernamePasswordAuthenticationFilter.class);
 
-        http.formLogin();
-
-        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
+//        http.formLogin();
+//
+//        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
         return http.build();
     }

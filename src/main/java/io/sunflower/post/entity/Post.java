@@ -25,13 +25,13 @@ public class Post extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String postContents;
 
-    @Column(nullable = false)
+    @Column
     private String menuList;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private MealCountEnum mealCount;
 

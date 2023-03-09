@@ -1,5 +1,7 @@
-package io.sunflower.nutrition;
+package io.sunflower.nutrition.controller;
 
+import io.sunflower.nutrition.dto.NutritionDto;
+import io.sunflower.nutrition.service.NutritionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +10,6 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
 public class NutritionController {
 
     private final NutritionService nutritionService;
@@ -18,10 +19,10 @@ public class NutritionController {
         return nutritionService.searchNutritions(keyword);
     }
 
-    // 영양성분 단건 조회
-    @GetMapping("/posts/search-nutrition")
+    // 포스팅 내에서 영양성분 조회 시
+    @GetMapping("/api/posts/search-nutrition")
     public NutritionDto searchNutrition(@RequestParam String keyword) {
-        return nutritionService.searchNutritions(keyword).get(0);
+        return nutritionService.searchNutritionInPosting(keyword);
     }
 }
 

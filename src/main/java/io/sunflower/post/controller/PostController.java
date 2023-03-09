@@ -27,17 +27,17 @@ public class PostController {
     private final PostService postService;
     private final S3Uploader s3Uploader;
 
-    @PostMapping("/")
+    @PostMapping(value = "/", consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public PostDetailResponse createPost(@RequestPart(required = false, value = "files") List<MultipartFile> files,
-                                         @Valid @RequestPart(value = "dto") PostRequest request,
+    public PostDetailResponse createPost(PostRequest request,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        s3Uploader.checkFileUpload(files);
-        List<String> urls = s3Uploader.uploadFiles(files, "postImage");
+        s3Uploader.checkFileUpload(request.getFiles());
+        List<String> urls = s3Uploader.uploadFiles(request.getFiles(), "postImage");
         return postService.savePost(urls, request, userDetails.getUser());
     }
+
 
     // 포스트 단건 조회 및 전체 댓글 조회
     @GetMapping("/{postId}")

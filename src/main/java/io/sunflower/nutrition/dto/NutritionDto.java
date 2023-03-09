@@ -1,5 +1,6 @@
-package io.sunflower.nutrition;
+package io.sunflower.nutrition.dto;
 
+import io.sunflower.nutrition.entity.Nutrition;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;
@@ -10,7 +11,6 @@ import org.springframework.lang.Nullable;
 public class NutritionDto {
     private String foodName;
     private String foodCode;
-
     private String nuCarbs;
     private String nuProtein;
     private String nuFat;
@@ -23,5 +23,14 @@ public class NutritionDto {
         this.nuProtein = nutriJson.getString("NUTR_CONT3");
         this.nuFat = nutriJson.getString("NUTR_CONT4");
         this.nuKcal = nutriJson.getString("NUTR_CONT1");
+    }
+
+    public NutritionDto(Nutrition nutrition) {
+        this.foodName = nutrition.getFoodName();
+        this.foodCode = nutrition.getFoodCode();
+        this.nuCarbs = nutrition.getNuCarbs();
+        this.nuProtein = nutrition.getNuProtein();
+        this.nuFat = nutrition.getNuFat();
+        this.nuKcal = nutrition.getNuKcal();
     }
 }

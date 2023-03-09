@@ -38,7 +38,6 @@ public class Comment extends TimeStamped {
         this.commentContents = request.getCommentContent();
         this.post = post;
         this.user = user;
-
     }
 
     public void addPost(Post post) {

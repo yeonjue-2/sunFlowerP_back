@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    boolean existsBypostIdAndUserId(Long postId, Long userId);
+    boolean existsByPostIdAndUserId(Long postId, Long userId);
 
     Long countByPostId(Long postId);
 
