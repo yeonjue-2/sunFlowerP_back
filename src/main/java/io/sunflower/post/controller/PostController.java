@@ -2,6 +2,7 @@ package io.sunflower.post.controller;
 
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostDetailResponse;
+import io.sunflower.post.dto.PostResponse;
 import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.post.service.PostService;
@@ -27,7 +28,7 @@ public class PostController {
     private final PostService postService;
     private final S3Uploader s3Uploader;
 
-    @PostMapping(value = "/", consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_USER')")
     public PostDetailResponse createPost(PostRequest request,
@@ -53,8 +54,9 @@ public class PostController {
      */
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostDetailResponse> readPosts(@PageableDefault(size = 15) Pageable pageable) {
-        return postService.findPosts(pageable);
+    public Slice<PostResponse> readPosts(Pageable pageable,
+                                         @RequestParam(required = false, name = "sort") String likeCount) {
+        return postService.findPosts(pageable, likeCount);
     }
 
     /**
@@ -63,7 +65,7 @@ public class PostController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostDetailResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
+    public Slice<PostResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
                                                  @RequestParam String keyword) {
         return postService.searchPosts(keyword, pageable);
     }

@@ -21,6 +21,7 @@ public class LikeService {
     public void saveLike(Long postId, User user) {
         Post post = getPostEntity(postId);
 
+        // 좋아요 여부 판단
         validateLike(postId, user);
 
         Like like = Like.builder()
@@ -29,6 +30,9 @@ public class LikeService {
                 .build();
 
         likeRepository.save(like);
+
+        // 좋아요 저장 후 좋아요 수를 업데이트
+        updateLikeCount(post);
     }
 
     public void removeLike(Long postId, User user) {
@@ -37,10 +41,6 @@ public class LikeService {
         );
 
         likeRepository.delete(like);
-    }
-
-    public Long findLikeCount(Long postId) {
-        return likeRepository.countByPostId(postId);
     }
 
 
@@ -61,5 +61,11 @@ public class LikeService {
         if (likeRepository.existsByPostIdAndUserId(postId, user.getId())) {
             throw new DuplicatedException(DUPLICATED_LIKE);
         }
+    }
+
+    private void updateLikeCount(Post post) {
+        int likeCount = likeRepository.countByPostId(post.getId());
+        post.updateLike(likeCount);
+        postRepository.save(post);
     }
 }

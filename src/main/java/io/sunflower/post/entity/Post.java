@@ -50,6 +50,10 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private String nuKcal;
 
+    @ColumnDefault("0")
+    @Column(nullable = false)
+    private int likeCount;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImage> postImages = new ArrayList<>();
 
@@ -114,4 +118,8 @@ public class Post extends TimeStamped {
         comment.addPost(this);
     }
 
+    public void updateLike(int likeCount) {
+        this.likeCount = likeCount;
+//        comment.addPost(this);
+    }
 }

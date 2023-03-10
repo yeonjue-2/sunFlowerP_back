@@ -26,7 +26,7 @@ public class PostDetailResponse {
     private String userImageUrl;
     private List<String> postImageUrls;
     private List<CommentResponse> comments;
-    private Long likeCount;
+    private int likeCount;
     private LocalDateTime createAt;
 
 
@@ -47,7 +47,7 @@ public class PostDetailResponse {
                 .collect(Collectors.toList());
     }
 
-    public PostDetailResponse(Post post, Long likeCount) {
+    public PostDetailResponse(Post post, int likeCount) {
         this.postId = post.getId();
         this.postContents = post.getPostContents();
         this.menuList = post.getMenuList();
@@ -87,5 +87,6 @@ public class PostDetailResponse {
         comments = post.getComments().stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());
+        this.likeCount = post.getLikeCount();
     }
 }

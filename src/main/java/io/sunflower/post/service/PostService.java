@@ -5,14 +5,17 @@ import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.like.service.LikeService;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostDetailResponse;
+import io.sunflower.post.dto.PostResponse;
 import io.sunflower.post.entity.Post;
 import io.sunflower.post.entity.PostImage;
 import io.sunflower.user.entity.User;
 import io.sunflower.post.repository.PostRepository;
 import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,40 +33,29 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
-    private final LikeService likeService;
 
     public PostDetailResponse findPost(Long postId) {
         Post post = getPostEntity(postId);
-        Long likeCount = likeService.findLikeCount(postId);
-        return new PostDetailResponse(post, likeCount);
+        return new PostDetailResponse(post);
     }
 
-    public Slice<PostDetailResponse> findPosts(Pageable pageable) {
-        Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+    public Slice<PostResponse> findPosts(Pageable pageable, String likeCount) {
+        Slice<Post> posts;
 
-        return posts.map(post -> makePostDetailResponse(post, post.getId()));
+        if (likeCount != null) {
+            pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "likeCount"));
+            posts = postRepository.findAll(pageable);
+
+            return posts.map(PostResponse::new);
+        }
+
+        posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return posts.map(PostResponse::new);
     }
 
-    private PostDetailResponse makePostDetailResponse(Post post, Long postId) {
-        Long likeCount = likeService.findLikeCount(postId);
-        return new PostDetailResponse(post, likeCount);
-    }
-
-    public Slice<PostDetailResponse> searchPosts(String keyword, Pageable pageable) {
+    public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
         Slice<Post> posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
-
-//        return posts.map(PostDetailResponse::new);
-//          return posts.map(o -> {
-//                      Long likeCount = likeService.findLikeCount(o.getId());
-//                      (o, likeCount) -> new PostDetailResponse(o, likeCount);
-//                  });
-
-        return posts.map(o -> {
-            Long likeCount = likeService.findLikeCount(o.getId());
-            new PostDetailResponse(o, likeCount);
-
-            return null;
-        });
+        return posts.map(PostResponse::new);
     }
 
     @Transactional
