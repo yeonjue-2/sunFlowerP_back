@@ -52,22 +52,11 @@ public class PostController {
      * 포스트 전체 조회(메인 화면, 최신순 정렬(createdAt = Desc))
      * 댓글 많은 순 정렬, 하트 많은 순 정렬
      */
-    @GetMapping("/")
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> readPosts(Pageable pageable,
+    public Slice<PostResponse> readPosts(@PageableDefault(size = 15) Pageable pageable,
                                          @RequestParam(required = false, name = "sort") String likeCount) {
         return postService.findPosts(pageable, likeCount);
-    }
-
-    /**
-     * 포스트 검색 조회
-     * 댓글 많은 순 정렬, 하트 많은 순 정렬
-     */
-    @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
-                                                 @RequestParam String keyword) {
-        return postService.searchPosts(keyword, pageable);
     }
 
     @PatchMapping("/{postId}")

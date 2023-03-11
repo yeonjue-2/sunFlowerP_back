@@ -2,7 +2,6 @@ package io.sunflower.post.service;
 
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
-import io.sunflower.like.service.LikeService;
 import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.dto.PostDetailResponse;
 import io.sunflower.post.dto.PostResponse;
@@ -19,9 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
@@ -53,8 +50,18 @@ public class PostService {
         return posts.map(PostResponse::new);
     }
 
-    public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
-        Slice<Post> posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
+    public Slice<PostResponse> searchPosts(Pageable pageable, String keyword, String likeCount) {
+        Slice<Post> posts;
+//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+
+        if (likeCount != null) {
+            pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "likeCount"));
+            posts = postRepository.findByMenuListContaining(keyword, pageable);
+
+            return posts.map(PostResponse::new);
+        }
+
+        posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
         return posts.map(PostResponse::new);
     }
 
