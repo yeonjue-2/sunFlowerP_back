@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{postId}/comments/")
+    @PostMapping("/{postId}/comment/")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponse createComment(@PathVariable Long postId, @RequestBody CommentRequest request,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -28,9 +30,19 @@ public class CommentController {
     }
 
     /**
+     * 포스트 조회시 내가 작성한 댓글이 있으면 먼저 조회
+     */
+    @GetMapping("{postId}/comment-read")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentResponse readCommentByUser(@PathVariable Long postId,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.findCommentByUser(postId, userDetails.getUser());
+    }
+
+    /**
      * 포스트 조회 시 전체 댓글 조회
      */
-    @GetMapping("/{postId}/comments/")
+    @GetMapping("/{postId}/comment/")
     @ResponseStatus(HttpStatus.OK)
     public Slice<CommentResponse> readComments(@PathVariable Long postId,
                                                @PageableDefault(size = 15) Pageable pageable) {
@@ -38,14 +50,14 @@ public class CommentController {
 
     }
 
-    @PatchMapping("/comments/{commentId}")
+    @PatchMapping("/comment/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public CommentResponse updateComment(@PathVariable Long commentId, @RequestBody CommentRequest request,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.modifyComment(commentId, request, userDetails.getUser());
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/comment/{commentId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable Long commentId,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {

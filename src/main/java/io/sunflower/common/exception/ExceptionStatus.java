@@ -7,6 +7,10 @@ import lombok.Getter;
 @Getter
 public enum ExceptionStatus {
 
+    // 204 -> NO_CONTENT : 올바른 접근으로 아무 값도 넘겨주지 않을 때
+    NO_CONTENT_COMMENT(204, "유저 댓글 없음"),
+
+
     // 400 ->  BAD _ REQUEST : 잘못된 요청 (ex. 파라미터 값을 확인해주세요 )
     IMAGE_UPLOAD_FAILED(400, "이미지 업로드에 실패하였습니다."),
     UNSUPPORTED_IMAGE_TYPE(400, "지원하지 않는 이미지 형식입니다."),

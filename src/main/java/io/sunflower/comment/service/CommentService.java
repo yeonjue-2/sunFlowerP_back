@@ -14,8 +14,14 @@ import io.sunflower.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
@@ -35,6 +41,15 @@ public class CommentService {
         comment.addPost(post);
 
         commentRepository.save(comment);
+
+        return new CommentResponse(comment);
+    }
+
+    public CommentResponse findCommentByUser(Long postId, User user) {
+
+        Comment comment = commentRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(
+                () -> new NotFoundException(NO_CONTENT_COMMENT)
+        );
 
         return new CommentResponse(comment);
     }
@@ -82,4 +97,5 @@ public class CommentService {
                 () -> new NotFoundException(NOT_FOUND_COMMENT)
         );
     }
+
 }
