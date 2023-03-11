@@ -14,11 +14,6 @@ import static io.sunflower.common.constant.UserConst.PASSWORD_CONDITION;
 @Getter
 public class UserInfoUpdateRequest {
 
-    @NotEmpty(message = NECESSARY_PASSWORD)
-    @Length(min = 8, max = 14, message = PASSWORD_CONDITION)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#$%^&*])[A-Za-z\\d~!@#$%^&*]{8,14}", message = "")
-    private String password;
-
     @NotEmpty(message = "닉네임은 필수입니다.")
     @Length(min = 2, max = 12, message = "닉네임은 2 ~ 12자로 설정해 주세요.")
     @Pattern(regexp = "^[가-힣a-zA-Z0-9-_]*$", message = "한글")

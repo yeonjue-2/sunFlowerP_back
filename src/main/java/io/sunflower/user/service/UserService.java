@@ -2,10 +2,7 @@ package io.sunflower.user.service;
 
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
-import io.sunflower.user.dto.UserInfoUpdateResponse;
-import io.sunflower.user.dto.UserInfoUpdateRequest;
-import io.sunflower.user.dto.UserModalInfoResponse;
-import io.sunflower.user.dto.UserProfileResponse;
+import io.sunflower.user.dto.*;
 import io.sunflower.user.entity.User;
 import io.sunflower.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,15 +34,22 @@ public class UserService {
 
         User userById = findUserByNickname(nickname);
 
-        String password = null;
-        if (request.getPassword() != null) {
-            password = passwordEncoder.encode(request.getPassword());
-        }
-
         if (userById.getEmailId().equals(user.getEmailId())) {
-            userById.updateUserInfo(request, password, userImageUrl);
+            userById.updateUserInfo(request, userImageUrl);
             userRepository.save(userById);
             return new UserInfoUpdateResponse(userById);
+        } else {
+            throw new InvalidAccessException(NOT_AUTHORIZED_USER);
+        }
+    }
+
+    public void modifyPassword(String nickname, PasswordUpdateRequest request, User user) {
+        User userById = findUserByNickname(nickname);
+
+        if (userById.getEmailId().equals(user.getEmailId())) {
+            String password = passwordEncoder.encode(request.getPassword());
+            userById.updatePassword(password);
+            userRepository.save(userById);
         } else {
             throw new InvalidAccessException(NOT_AUTHORIZED_USER);
         }

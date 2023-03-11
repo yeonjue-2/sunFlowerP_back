@@ -1,11 +1,8 @@
 package io.sunflower.user.controller;
 
 import io.sunflower.s3.S3Uploader;
-import io.sunflower.user.dto.UserInfoUpdateResponse;
-import io.sunflower.user.dto.UserInfoUpdateRequest;
+import io.sunflower.user.dto.*;
 import io.sunflower.security.UserDetailsImpl;
-import io.sunflower.user.dto.UserModalInfoResponse;
-import io.sunflower.user.dto.UserProfileResponse;
 import io.sunflower.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,11 +14,22 @@ import static io.sunflower.common.constant.UserConst.DEFAULT_USER_IMAGE;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
     private final S3Uploader s3Uploader;
+
+    /**
+     * nickname 유저의 프로필 보기
+     *
+     * @param nickname
+     * @return
+     */
+    @GetMapping("/users/{nickname}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserProfileResponse readUser(@PathVariable String nickname) {
+        return userService.findUser(nickname);
+    }
 
     /**
      * 사용자의 프로필 수정
@@ -48,7 +56,7 @@ public class UserController {
 //    }
 
 
-    @PatchMapping("/{nickname}")
+    @PatchMapping("/users/{nickname}")
     @ResponseStatus(HttpStatus.CREATED)
     public UserInfoUpdateResponse updateUserInfo(@PathVariable String nickname, @RequestBody UserInfoUpdateRequest request,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -65,16 +73,19 @@ public class UserController {
         return userService.modifyUserInfo(userImageUrl, nickname, request, userDetails.getUser());
     }
 
-
     /**
-     * nickname 유저의 프로필 보기
-     *
+     * 비밀번호 수정 페이지, ApiAuthController에서 비밀번호 확인 후 해당 controller로 접속
      * @param nickname
+     * @param request
+     * @param userDetails
      * @return
      */
-    @GetMapping("/{nickname}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserProfileResponse readUser(@PathVariable String nickname) {
-        return userService.findUser(nickname);
+    @PatchMapping("/update-passwords/{nickname}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updatePassword(@PathVariable String nickname,
+                               @RequestBody PasswordUpdateRequest request,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        userService.modifyPassword(nickname, request, userDetails.getUser());
     }
 }

@@ -2,6 +2,7 @@ package io.sunflower.auth.controller;
 
 import io.sunflower.auth.service.AuthService;
 import io.sunflower.security.UserDetailsImpl;
+import io.sunflower.user.dto.PasswordUpdateRequest;
 import io.sunflower.user.dto.UserInfoUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AuthApiController {
     }
 
     @GetMapping("/passwords")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody UserInfoUpdateRequest request,
+    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordUpdateRequest request,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         authService.checkPassword(request.getPassword(), userDetails.getUser());
         return ResponseEntity.ok(true);

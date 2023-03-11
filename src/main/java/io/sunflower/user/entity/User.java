@@ -85,11 +85,7 @@ public class User extends TimeStamped {
         return this;
     }
 
-    public void updateUserInfo(UserInfoUpdateRequest request, String password, String userImageUrl) {
-
-        if (password != null) {
-            this.setPassword(password);
-        }
+    public void updateUserInfo(UserInfoUpdateRequest request, String userImageUrl) {
 
         if (request.getNickname() != null) {
             this.setNickname(request.getNickname());
@@ -105,6 +101,11 @@ public class User extends TimeStamped {
 
         this.setUserImageUrl(userImageUrl);
 
+    }
+
+    // 연관관계 편의 메소드
+    public void updatePassword(String password) {
+        this.setPassword(password);
     }
 
     public void addPost(Post post) {
