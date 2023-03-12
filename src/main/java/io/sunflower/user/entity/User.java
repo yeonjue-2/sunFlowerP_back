@@ -15,6 +15,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.sunflower.common.enumeration.UserStatus.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -100,6 +102,11 @@ public class User extends TimeStamped {
 
         this.setUserImageUrl(userImageUrl);
 
+    }
+
+    public void updateUserStatus() {
+        this.status = DELETED;
+        this.nickname = "NONE";
     }
 
     // 연관관계 편의 메소드

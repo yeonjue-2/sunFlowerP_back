@@ -7,9 +7,11 @@ import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.auth.service.AuthService;
 import io.sunflower.s3.S3Uploader;
+import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.security.jwt.dto.TokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -46,8 +48,14 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
-    public void logOut(final @RequestBody TokenRequest request) {
+    public void logOut(@RequestBody TokenRequest request) {
         authService.logout(request);
+    }
+
+    @DeleteMapping("/sign-out")
+    @ResponseStatus(HttpStatus.OK)
+    public void signOut(@RequestBody TokenRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        authService.signOut(request, userDetails.getUser());
     }
 
 }

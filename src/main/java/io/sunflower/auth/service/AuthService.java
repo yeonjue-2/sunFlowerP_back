@@ -5,8 +5,10 @@ import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.auth.dto.ReissueResponse;
 import io.sunflower.auth.dto.SignupRequest;
+import io.sunflower.common.enumeration.UserStatus;
 import io.sunflower.common.exception.model.AuthException;
 import io.sunflower.common.exception.model.DuplicatedException;
+import io.sunflower.common.exception.model.NotFoundException;
 import io.sunflower.common.util.RedisUtil;
 import io.sunflower.security.jwt.JwtTokenProvider;
 import io.sunflower.security.jwt.dto.TokenDto;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 
 import static io.sunflower.common.constant.JwtConstant.*;
+import static io.sunflower.common.enumeration.UserStatus.*;
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
 @Service
@@ -54,6 +57,8 @@ public class AuthService {
     @Transactional
     public LoginResponse login(LoginRequest request, HttpServletResponse response) {
         User user = userService.findUserByEmailId(request.getEmailId());
+
+        checkUserStatus(user.getStatus());
         checkPassword(request.getPassword(), user);
 
         Authentication authentication = jwtTokenProvider.createAuthentication(request.getEmailId());
@@ -102,6 +107,13 @@ public class AuthService {
         redisUtil.setDataExpire("JWT:ATK:" +request.getAccessToken(), "TRUE", ACCESS_TOKEN_TIME / 1000L);
     }
 
+    @Transactional
+    public void signOut(TokenRequest request, User user) {
+        user.updateUserStatus();
+        userRepository.save(user);
+        logout(request);
+    }
+
 
 
     // ==================== 내부 메서드 ======================
@@ -137,6 +149,12 @@ public class AuthService {
     private void validateRefreshTokenOwner(String validRefreshToken, TokenRequest request) {
         if (!request.validateToken(validRefreshToken)) {
             throw new AuthException(INVALID_REFRESH_TOKEN);
+        }
+    }
+
+    private void checkUserStatus(UserStatus status) {
+        if (status.equals(DELETED)) {
+            throw new NotFoundException(NOT_FOUND_USER);
         }
     }
 }
