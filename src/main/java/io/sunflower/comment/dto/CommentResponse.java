@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class CommentResponse {
-
+    private Long id;
     private String commentContent;
     private String nickname;
     private String userImageUrl;
@@ -19,6 +19,7 @@ public class CommentResponse {
 
     public static CommentResponse of(Comment comment) {
         return CommentResponse.builder()
+                .id(comment.getId())
                 .commentContent(comment.getCommentContents())
                 .nickname(comment.getUser().getNickname())
                 .userImageUrl(comment.getUser().getUserImageUrl())

@@ -9,6 +9,7 @@ import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,7 @@ public class PostDetailResponse {
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
         comments = post.getComments().stream()
+                .sorted(Comparator.comparing(Comment::getId).reversed())
                 .map(CommentResponse::of)
                 .collect(Collectors.toList());
         this.likeCount = post.getLikeCount();
