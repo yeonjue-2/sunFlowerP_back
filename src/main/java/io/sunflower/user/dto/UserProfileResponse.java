@@ -2,6 +2,7 @@ package io.sunflower.user.dto;
 
 import io.sunflower.common.enumeration.UserGenderEnum;
 import io.sunflower.post.dto.PostDetailResponse;
+import io.sunflower.post.dto.PostResponse;
 import io.sunflower.user.entity.User;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class UserProfileResponse {
     private String userContents;
     private UserGenderEnum gender;
     private String userImageUrl;
-    private List<PostDetailResponse> posts;
+    private List<PostResponse> posts;
 
     public UserProfileResponse(User user) {
         this.nickname = user.getNickname();
@@ -22,7 +23,7 @@ public class UserProfileResponse {
         this.gender = user.getGender();
         this.userImageUrl = user.getUserImageUrl();
         this.posts = user.getPosts().stream()
-                .map(PostDetailResponse::new).collect(Collectors.toList());
+                .map(PostResponse::new).collect(Collectors.toList());
     }
 }
 

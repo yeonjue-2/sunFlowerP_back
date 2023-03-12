@@ -7,6 +7,7 @@ import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.common.enumeration.UserRoleEnum;
 import io.sunflower.common.util.RedisUtil;
 import io.sunflower.kakao.dto.KakaoUserInfo;
+import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.jwt.JwtTokenProvider;
 import io.sunflower.security.jwt.dto.TokenDto;
 import io.sunflower.user.entity.User;
@@ -30,6 +31,7 @@ import java.util.UUID;
 import static io.sunflower.common.constant.JwtConstant.REFRESH_TOKEN_TIME;
 import static io.sunflower.common.constant.KakaoConstant.CLIENT_ID;
 import static io.sunflower.common.constant.KakaoConstant.REDIRECT_URI;
+import static io.sunflower.common.constant.UserConst.DEFAULT_USER_IMAGE;
 
 @Slf4j
 @Service
@@ -39,6 +41,7 @@ public class KakaoService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final S3Uploader s3Uploader;
     private final RedisUtil redisUtil;
 
     public LoginResponse kakaoLogin(String code) throws IOException {
@@ -123,7 +126,7 @@ public class KakaoService {
     // 3. 필요시에 회원가입
     private User registerKakaoUserIfNeeded(KakaoUserInfo kakaoUserInfo) {
         // DB 에 중복된 KakaoId 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
+        String kakaoId = kakaoIdToString(kakaoUserInfo.getId());
         User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
@@ -143,7 +146,9 @@ public class KakaoService {
                 // email: kakao email
                 String email = kakaoUserInfo.getKakaoEmail();
 
-                kakaoUser = new User(kakaoId, email, encodedPassword, kakaoUserInfo.getKakaoNickname(), UserRoleEnum.USER);
+                String userImageUrl = DEFAULT_USER_IMAGE;
+
+                kakaoUser = new User(kakaoId, email, encodedPassword, kakaoUserInfo.getKakaoNickname(), UserRoleEnum.USER, userImageUrl);
             }
 
             userRepository.save(kakaoUser);
@@ -154,5 +159,9 @@ public class KakaoService {
 //        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_TIME);
 
         return kakaoUser;
+    }
+
+    private String kakaoIdToString(Long id) {
+        return "kakao_" + id;
     }
 }

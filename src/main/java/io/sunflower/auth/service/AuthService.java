@@ -57,7 +57,7 @@ public class AuthService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(request, emailId, password, nickname, role, userImageUrl);
+        User user = new User(emailId, password, nickname, role, userImageUrl);
         userRepository.save(user);
     }
 

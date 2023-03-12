@@ -25,21 +25,20 @@ import static io.sunflower.common.constant.UserConst.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final KakaoService kakaoService;
     private final S3Uploader s3Uploader;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@RequestBody @Valid SignupRequest request) {
 
-        String userImageUrl = DEFAULT_USER_IMAGE;
+//        String userImageUrl = DEFAULT_USER_IMAGE;
+//
+//        if (request.getUserImage() != null) {
+//            s3Uploader.checkFileExtension(request.getUserImage().getOriginalFilename());
+//            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "userImage");
+//        }
 
-        if (request.getUserImage() != null) {
-            s3Uploader.checkFileExtension(request.getUserImage().getOriginalFilename());
-            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "userImage");
-        }
-
-        authService.signup(userImageUrl, request);
+        authService.signup(DEFAULT_USER_IMAGE, request);
     }
 
     @PostMapping("/login")
@@ -58,20 +57,6 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public void logOut(final @RequestBody TokenRequest request) {
         authService.logout(request);
-    }
-
-    /**
-     * 카카오에서 주는 인가코드를 받아(controller), 로그인 처리(service)
-     * @param code: 카카오 서버로부터 받은 인가 코드
-     * @return response body에 정보 채워서 전달
-     * https://kauth.kakao.com/oauth/authorize?client_id=86483f30e78c6016d89913f11cd358ce&
-     * redirect_uri=http://localhost:8080/api/auth/kakao/callback&response_type=code
-     */
-    @GetMapping("/kakao/callback")
-    @ResponseStatus(HttpStatus.OK)
-    public LoginResponse kakaoLogin(@RequestParam String code) throws IOException {
-
-        return kakaoService.kakaoLogin(code);
     }
 
 }
