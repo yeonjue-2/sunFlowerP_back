@@ -1,5 +1,6 @@
 package io.sunflower.auth.controller;
 
+import io.sunflower.auth.dto.PasswordRequest;
 import io.sunflower.auth.service.AuthService;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.user.dto.PasswordUpdateRequest;
@@ -28,7 +29,7 @@ public class AuthApiController {
     }
 
     @GetMapping("/passwords")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordUpdateRequest request,
+    public ResponseEntity<Boolean> checkPassword(@RequestBody PasswordRequest request,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         authService.checkPassword(request.getPassword(), userDetails.getUser());
         return ResponseEntity.ok(true);

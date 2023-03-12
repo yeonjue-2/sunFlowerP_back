@@ -40,7 +40,8 @@ public enum ExceptionStatus {
 
     NOT_AUTHORIZED_COMMENT(401, "해당 댓글의 작성자가 아닙니다."),
     NOT_AUTHORIZED_POST(401, "해당 게시글의 작성자가 아닙니다."),
-    NOT_AUTHORIZED_USER(401, "해당 사용자만 접근 가능합니다.");
+    NOT_AUTHORIZED_USER(401, "해당 사용자만 접근 가능합니다."),
+    NOT_AUTHORIZED_PASSWORD(401, "해당 사용자가 아니거나 비밀번호가 올바르지 않습니다.");
 
     private final int statusCode;
     private final String message;

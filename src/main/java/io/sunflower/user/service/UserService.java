@@ -46,12 +46,13 @@ public class UserService {
     public void modifyPassword(String nickname, PasswordUpdateRequest request, User user) {
         User userById = findUserByNickname(nickname);
 
-        if (userById.getEmailId().equals(user.getEmailId())) {
-            String password = passwordEncoder.encode(request.getPassword());
+        if (userById.getEmailId().equals(user.getEmailId()) &&
+            passwordEncoder.matches(request.getCurPassword(), user.getPassword())) {
+            String password = passwordEncoder.encode(request.getNewPassword());
             userById.updatePassword(password);
             userRepository.save(userById);
         } else {
-            throw new InvalidAccessException(NOT_AUTHORIZED_USER);
+            throw new InvalidAccessException(NOT_AUTHORIZED_PASSWORD);
         }
     }
 

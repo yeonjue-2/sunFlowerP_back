@@ -49,11 +49,9 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .antMatchers("/api/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/posts").permitAll()
-                .antMatchers("/users").permitAll()
-                .antMatchers("/search-nutritions").permitAll()
+                .antMatchers("/posts/**").permitAll()
+                .antMatchers("/search-nutritions/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisUtil), UsernamePasswordAuthenticationFilter.class);
 
