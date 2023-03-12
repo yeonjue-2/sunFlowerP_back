@@ -10,7 +10,6 @@ public enum ExceptionStatus {
     // 204 -> NO_CONTENT : 올바른 접근으로 아무 값도 넘겨주지 않을 때
     NO_CONTENT_COMMENT(204, "유저 댓글 없음"),
 
-
     // 400 ->  BAD _ REQUEST : 잘못된 요청 (ex. 파라미터 값을 확인해주세요 )
     IMAGE_UPLOAD_FAILED(400, "이미지 업로드에 실패하였습니다."),
     UNSUPPORTED_IMAGE_TYPE(400, "지원하지 않는 이미지 형식입니다."),
@@ -29,7 +28,7 @@ public enum ExceptionStatus {
     DUPLICATED_LIKE(409, "이미 좋아요를 눌렀습니다."),
 
     // 500 -> INTERNAL SERVER ERROR : 서버에러
-    FAIL_TO_POSTING(500, "게시글 작성을 잠시 후 시도해주세요"),
+    FAIL_TO_POSTING(500, "잠시 후 다시 시도해주세요"),
 
     // 401 -> AUTH
     INVALID_REFRESH_TOKEN(401, "유효하지 않은 리프레시 토큰입니다."),

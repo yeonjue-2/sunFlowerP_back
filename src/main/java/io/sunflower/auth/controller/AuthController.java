@@ -25,19 +25,10 @@ import static io.sunflower.common.constant.UserConst.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final S3Uploader s3Uploader;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@RequestBody @Valid SignupRequest request) {
-
-//        String userImageUrl = DEFAULT_USER_IMAGE;
-//
-//        if (request.getUserImage() != null) {
-//            s3Uploader.checkFileExtension(request.getUserImage().getOriginalFilename());
-//            userImageUrl = s3Uploader.uploadFile(request.getUserImage(), "userImage");
-//        }
-
         authService.signup(DEFAULT_USER_IMAGE, request);
     }
 

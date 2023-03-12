@@ -32,7 +32,7 @@ public class UserController {
     }
 
     /**
-     * 사용자의 프로필 수정
+     * 유저의 프로필 수정
      *
      * @param nickname
      * @param request
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     /**
-     * 비밀번호 수정 페이지, ApiAuthController에서 비밀번호 확인 후 해당 controller로 접속
+     * 비밀번호 수정
      * @param nickname
      * @param request
      * @param userDetails

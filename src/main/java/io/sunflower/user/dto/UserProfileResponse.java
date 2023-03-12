@@ -1,11 +1,12 @@
 package io.sunflower.user.dto;
 
 import io.sunflower.common.enumeration.UserGenderEnum;
-import io.sunflower.post.dto.PostDetailResponse;
 import io.sunflower.post.dto.PostResponse;
+import io.sunflower.post.entity.Post;
 import io.sunflower.user.entity.User;
 import lombok.Getter;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,9 @@ public class UserProfileResponse {
         this.gender = user.getGender();
         this.userImageUrl = user.getUserImageUrl();
         this.posts = user.getPosts().stream()
-                .map(PostResponse::new).collect(Collectors.toList());
+                .sorted(Comparator.comparing(Post::getId).reversed())
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
     }
 }
 

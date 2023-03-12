@@ -109,11 +109,5 @@ public class User extends TimeStamped {
 
     public void addPost(Post post) {
         posts.add(post);
-//        post.addUser(this);
     }
-
-//    public void addComment(Comment comment) {
-//        comments.add(comment);
-////        post.addUser(this);
-//    }
 }

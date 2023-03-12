@@ -36,8 +36,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RedisUtil redisUtil;
 
-    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
-
     @Transactional
     public void signup(String userImageUrl, SignupRequest request) {
         String emailId = request.getEmailId();
@@ -48,14 +46,6 @@ public class AuthService {
         checkIfUserNicknameDuplicated(nickname);
 
         UserRoleEnum role = UserRoleEnum.USER;
-
-        // TO-DO
-        if (request.isAdmin()) {
-            if (!request.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 올바르지 않습니다.");
-            }
-            role = UserRoleEnum.ADMIN;
-        }
 
         User user = new User(emailId, password, nickname, role, userImageUrl);
         userRepository.save(user);
@@ -74,11 +64,7 @@ public class AuthService {
 
         response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
 
-        return new LoginResponse(user.getEmailId(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
-
-        // TO-DO
-//        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(),
-//                tokenDto.getRefreshToken());
+        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
     }
 
     @Transactional
@@ -116,27 +102,21 @@ public class AuthService {
         redisUtil.setDataExpire("JWT:ATK:" +request.getAccessToken(), "TRUE", ACCESS_TOKEN_TIME / 1000L);
     }
 
+
+
     // ==================== 내부 메서드 ======================
 
     /**
      * 회원가입 시 이메일 중복 확인
      * @param emailId
      */
-    public boolean checkEmailIdDuplicate(String emailId) {
-        return userRepository.existsByEmailId(emailId);
-    }
-
-    public boolean checkNicknameDuplicate(String nickname) {
-        return userRepository.existsByNickname(nickname);
-    }
-
-    private void checkIfUserEmailIdDuplicated(String emailId) {
+    public void checkIfUserEmailIdDuplicated(String emailId) {
         if (userRepository.existsByEmailId(emailId)) {
             throw new DuplicatedException(DUPLICATED_EMAIL);
         }
     }
 
-    private void checkIfUserNicknameDuplicated(String nickname) {
+    public void checkIfUserNicknameDuplicated(String nickname) {
         if (userRepository.existsByNickname(nickname)) {
             throw new DuplicatedException(DUPLICATED_NICKNAME);
         }

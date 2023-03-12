@@ -14,7 +14,6 @@ public class SignupRequest {
 
     @NotEmpty(message = "이메일 주소는 필수입니다.")
     @Email(message = "올바른 이메일 형식을 입력해주세요.")
-//    @Pattern(regexp = "^[a-zA-Z0-9_+.-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,4}$")
     private String emailId;
 
     @NotEmpty(message = "비밀번호는 필수입니다.")

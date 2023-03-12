@@ -42,7 +42,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new CommentResponse(comment);
+        return CommentResponse.of(comment);
     }
 
     public CommentResponse findCommentByUser(Long postId, User user) {
@@ -51,13 +51,13 @@ public class CommentService {
                 () -> new NotFoundException(NO_CONTENT_COMMENT)
         );
 
-        return new CommentResponse(comment);
+        return CommentResponse.of(comment);
     }
 
     public Slice<CommentResponse> findComments(Long postId, Pageable pageable) {
         Slice<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId, pageable);
 
-        return comments.map(CommentResponse::new);
+        return comments.map(CommentResponse::of);
     }
 
     @Transactional
@@ -67,7 +67,7 @@ public class CommentService {
         if (comment.getUser().getEmailId().equals(user.getEmailId())) {
             comment.update(request);
             commentRepository.save(comment);
-            return new CommentResponse(comment);
+            return CommentResponse.of(comment);
         } else {
             throw new InvalidAccessException(NOT_AUTHORIZED_COMMENT);
         }

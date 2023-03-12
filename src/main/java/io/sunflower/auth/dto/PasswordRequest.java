@@ -6,14 +6,13 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-import static io.sunflower.common.constant.UserConst.NECESSARY_PASSWORD;
-import static io.sunflower.common.constant.UserConst.PASSWORD_CONDITION;
+import static io.sunflower.common.constant.UserConst.*;
 
 @Getter
 public class PasswordRequest {
 
     @NotEmpty(message = NECESSARY_PASSWORD)
-    @Length(min = 8, max = 14, message = PASSWORD_CONDITION)
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[~!@#$%^&*])[A-Za-z\\d~!@#$%^&*]{8,14}", message = "")
+    @Length(min = 8, max = 14, message = PASSWORD_LENGTH_CONDITION)
+    @Pattern(regexp = PASSWORD_REGEXP, message = PASSWORD_CONDITION)
     private String password;
 }

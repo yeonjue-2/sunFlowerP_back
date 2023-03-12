@@ -47,28 +47,6 @@ public class PostDetailResponse {
                 .collect(Collectors.toList());
     }
 
-    public PostDetailResponse(Post post, int likeCount) {
-        this.postId = post.getId();
-        this.postContents = post.getPostContents();
-        this.menuList = post.getMenuList();
-        this.mealCount = post.getMealCount();
-        this.nuCarbs = post.getNuCarbs();
-        this.nuProtein = post.getNuProtein();
-        this.nuFat = post.getNuFat();
-        this.nuKcal = post.getNuKcal();
-        this.createAt = post.getCreatedAt();
-        this.nickname = post.getUser().getNickname();
-        this.userImageUrl = post.getUser().getUserImageUrl();
-        postImageUrls = post.getPostImages().stream()
-                .map(PostImage::getPostImageUrl)
-                .collect(Collectors.toList());
-        comments = post.getComments().stream()
-                .map(CommentResponse::new)
-                .collect(Collectors.toList());
-        this.likeCount = likeCount;
-
-    }
-
     public PostDetailResponse(Post post) {
         this.postId = post.getId();
         this.postContents = post.getPostContents();
@@ -85,7 +63,7 @@ public class PostDetailResponse {
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
         comments = post.getComments().stream()
-                .map(CommentResponse::new)
+                .map(CommentResponse::of)
                 .collect(Collectors.toList());
         this.likeCount = post.getLikeCount();
     }

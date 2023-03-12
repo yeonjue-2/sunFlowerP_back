@@ -1,6 +1,8 @@
 package io.sunflower.nutrition.dto;
 
 import io.sunflower.nutrition.entity.Nutrition;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.json.JSONObject;

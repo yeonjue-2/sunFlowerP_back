@@ -102,12 +102,6 @@ public class Post extends TimeStamped {
 
     }
 
-    // 연관 관계 편의 메소드
-//    public void addUser(User user) {
-//        this.user = user;
-//        user.getPosts().add(this);
-//    }
-
     public void addPostImage(PostImage postImage) {
         postImages.add(postImage);
         postImage.addPost(this);
@@ -120,6 +114,5 @@ public class Post extends TimeStamped {
 
     public void updateLike(int likeCount) {
         this.likeCount = likeCount;
-//        comment.addPost(this);
     }
 }

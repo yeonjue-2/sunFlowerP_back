@@ -14,12 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.sunflower.common.constant.NutritionConst.NUTRITION_URL;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class NutritionService {
-    private static final String KEY_ID = "651efec27e044ae5b36f";
-    private static final String URL = "http://openapi.foodsafetykorea.go.kr/api/" + KEY_ID + "/I2790/json/1/5/DESC_KOR={keyword}";
 
     private final NutritionRepository nutritionRepository;
 
@@ -33,17 +33,14 @@ public class NutritionService {
         String body = "";
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body);
-        ResponseEntity<String> responseEntity = rest.exchange(URL, HttpMethod.GET, requestEntity, String.class, keyword);
-
-//        HttpStatus httpStatus = responseEntity.getStatusCode();
-//        int status = httpStatus.value();
+        ResponseEntity<String> responseEntity = rest.exchange(NUTRITION_URL, HttpMethod.GET, requestEntity, String.class, keyword);
 
         String response = responseEntity.getBody();
 
-        return fromJSONtoItems(keyword, response);  // keyword 값으로 data를 저장하기 위해
+        return fromJSONtoItems(response);
     }
 
-    public List<NutritionDto> fromJSONtoItems(String keyword, String response) {
+    public List<NutritionDto> fromJSONtoItems(String response) {
 
         JSONObject rjson = new JSONObject(response).getJSONObject("I2790");
         JSONArray items = rjson.getJSONArray("row");
@@ -75,7 +72,7 @@ public class NutritionService {
         String body = "";
 
         HttpEntity<String> requestEntity = new HttpEntity<String>(body);
-        ResponseEntity<String> responseEntity = rest.exchange(URL, HttpMethod.GET, requestEntity, String.class, keyword);
+        ResponseEntity<String> responseEntity = rest.exchange(NUTRITION_URL, HttpMethod.GET, requestEntity, String.class, keyword);
 
         String response = responseEntity.getBody();
 
