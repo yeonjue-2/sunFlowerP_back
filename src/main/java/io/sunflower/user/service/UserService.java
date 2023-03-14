@@ -56,6 +56,18 @@ public class UserService {
         }
     }
 
+    public void reissuePassword(String nickname, ReissuePasswordRequest request, User user) {
+        User userById = findUserByNickname(nickname);
+
+        if (userById.getEmailId().equals(user.getEmailId())) {
+            String password = passwordEncoder.encode(request.getPassword());
+            userById.updatePassword(password);
+            userRepository.save(userById);
+        } else {
+            throw new InvalidAccessException(NOT_AUTHORIZED_PASSWORD);
+        }
+    }
+
 
     // ==================== 내부 메서드 ======================
 
@@ -72,4 +84,6 @@ public class UserService {
         return userRepository.findByNickname(nickname).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_USER));
     }
+
+
 }

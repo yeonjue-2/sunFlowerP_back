@@ -88,4 +88,20 @@ public class UserController {
 
         userService.modifyPassword(nickname, request, userDetails.getUser());
     }
+
+    /**
+     * 비밀번호 찾기를 통한 비밀번호 재설정
+     * @param nickname
+     * @param request
+     * @param userDetails
+     * @return
+     */
+    @PatchMapping("/reissue-passwords/{nickname}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updatePassword(@PathVariable String nickname,
+                               @RequestBody ReissuePasswordRequest request,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        userService.reissuePassword(nickname, request, userDetails.getUser());
+    }
 }

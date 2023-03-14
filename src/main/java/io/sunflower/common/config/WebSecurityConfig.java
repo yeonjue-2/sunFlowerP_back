@@ -50,7 +50,7 @@ public class WebSecurityConfig {
 
         http.authorizeRequests().antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
                 .antMatchers("/search-nutritions/**").permitAll()
                 .anyRequest().authenticated()
