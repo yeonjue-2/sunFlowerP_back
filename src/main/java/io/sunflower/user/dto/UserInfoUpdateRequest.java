@@ -2,6 +2,7 @@ package io.sunflower.user.dto;
 
 import io.sunflower.common.enumeration.UserGenderEnum;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import static io.sunflower.common.constant.UserConst.NECESSARY_PASSWORD;
 import static io.sunflower.common.constant.UserConst.PASSWORD_CONDITION;
 
 @Getter
+@Setter
 public class UserInfoUpdateRequest {
 
     @NotEmpty(message = "닉네임은 필수입니다.")

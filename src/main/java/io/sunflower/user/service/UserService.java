@@ -68,6 +68,18 @@ public class UserService {
         }
     }
 
+    public boolean removeUserImage(String nickname, String userImageUrl, User user) {
+        User userById = findUserByNickname(nickname);
+
+        if (userById.getEmailId().equals(user.getEmailId())) {
+            userById.updateUserInfo(userImageUrl);
+            userRepository.save(userById);
+            return true;
+        } else {
+            throw new InvalidAccessException(NOT_AUTHORIZED_PASSWORD);
+        }
+    }
+
 
     // ==================== 내부 메서드 ======================
 

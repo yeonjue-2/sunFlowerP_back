@@ -100,8 +100,13 @@ public class User extends TimeStamped {
             this.setGender(request.getGender());
         }
 
-        this.setUserImageUrl(userImageUrl);
+        if (!this.userImageUrl.equals(userImageUrl)) {
+            this.setUserImageUrl(userImageUrl);
+        }
+    }
 
+    public void updateUserInfo(String userImageUrl) {
+        this.setUserImageUrl(userImageUrl);
     }
 
     public void updateUserStatus() {
