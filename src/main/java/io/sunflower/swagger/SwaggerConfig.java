@@ -28,7 +28,7 @@ public class SwaggerConfig {
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .apiInfo(swaggerInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("io.sunflower.controller"))
+                .apis(RequestHandlerSelectors.basePackage("io.sunflower"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false);
@@ -52,16 +52,11 @@ public class SwaggerConfig {
     //    username: root
     //    password: 1234
 
-    // database: sql_server
+//    driver-class-name: com.mysql.cj.jdbc.Driver
+//    url: jdbc:mysql://sunflower-db.cvmzekcc6vfq.ap-northeast-2.rds.amazonaws.com:3306/sunflower_database?serverTimezone=UTC&characterEncoding=UTF-8
+//    username: admin
+//    password: sunflower
 
-//   h2:
-//    console:
-//      enabled: true
-//
-//  datasource:
-//    driver-class-name: org.h2.Driver
-//    url: jdbc:h2:mem:db;MODE=MYSQL;
-//    username: sa
-//    password:
+    // database: sql_server
 }
 
