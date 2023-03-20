@@ -1,19 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-PROJECT_ROOT="/home/ubuntu/app"
-JAR_FILE="$PROJECT_ROOT/blog-project-0.0.1-SNAPSHOT.jar"
+ps -ef | grep 'java -jar /home/ubuntu/github_action/build/libs/sunflower-0.0.1-SNAPSHOT.jar' | awk '{print $2}' | while read line; do sudo kill $line; done >/dev/null 2>&1
+nohup java -jar /home/ubuntu/github_action/build/libs/*.jar >/dev/null 2>&1 &
 
-APP_LOG="$PROJECT_ROOT/application.log"
-ERROR_LOG="$PROJECT_ROOT/error.log"
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+# #!/usr/bin/env bash
 
-TIME_NOW=$(date +%c)
+# PROJECT_ROOT="/home/ubuntu/app"
+# JAR_FILE="$PROJECT_ROOT/blog-project-0.0.1-SNAPSHOT.jar"
 
-# build 파일 복사echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
-cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
+# APP_LOG="$PROJECT_ROOT/application.log"
+# ERROR_LOG="$PROJECT_ROOT/error.log"
+# DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
-# jar 파일 실행echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
-nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
+# TIME_NOW=$(date +%c)
 
-CURRENT_PID=$(pgrep -f $JAR_FILE)
-echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
+# # build 파일 복사echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
+# cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
+
+# # jar 파일 실행echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
+# nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
+
+# CURRENT_PID=$(pgrep -f $JAR_FILE)
+# echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
