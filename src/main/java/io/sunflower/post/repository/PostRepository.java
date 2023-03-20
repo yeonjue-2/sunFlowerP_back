@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Slice<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    Slice<Post> findByMenuListContainingOrderByCreatedAtDesc(String keyword, Pageable pageable);
+    Slice<Post> findAllByOrderByIdDesc(Pageable pageable);
+    Slice<Post> findByMenuListContainingOrderByIdDesc(String keyword, Pageable pageable);
     Slice<Post> findByMenuListContaining(String keyword, Pageable pageable);
-
-
 }

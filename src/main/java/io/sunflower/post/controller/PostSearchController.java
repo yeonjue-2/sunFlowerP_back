@@ -23,10 +23,10 @@ public class PostSearchController {
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> searchPosts(@PageableDefault(size = 15) Pageable pageable,
+    public Slice<PostResponse> searchPosts(@RequestParam("page") int page,
                                            @RequestParam(required = false, name = "sort") String likeCount,
                                            @RequestParam String keyword) {
-        return postService.searchPosts(pageable, keyword, likeCount);
+        return postService.searchPosts(page, keyword, likeCount);
     }
 
 }
