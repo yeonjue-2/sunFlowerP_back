@@ -1,7 +1,7 @@
 package io.sunflower.security;
 
-import io.sunflower.entity.User;
-import io.sunflower.entity.enumeration.UserRoleEnum;
+import io.sunflower.user.entity.User;
+import io.sunflower.common.enumeration.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +12,11 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
-    private final String personalId;
+    private final String emailId;
 
-    public UserDetailsImpl(User user, String personalId) {
+    public UserDetailsImpl(User user, String emailId) {
         this.user = user;
-        this.personalId = personalId;
+        this.emailId = emailId;
     }
 
     public User getUser() {
@@ -37,31 +37,31 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.personalId;
+        return emailId;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
