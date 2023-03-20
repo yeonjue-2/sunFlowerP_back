@@ -50,13 +50,13 @@ public class PostController {
 
     /**
      * 포스트 전체 조회(메인 화면, 최신순 정렬(createdAt = Desc))
-     * 댓글 많은 순 정렬, 하트 많은 순 정렬
+     * 하트 많은 순 정렬
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Slice<PostResponse> readPosts(@PageableDefault(size = 15) Pageable pageable,
+    public Slice<PostResponse> readPosts(@RequestParam("page") int page,
                                          @RequestParam(required = false, name = "sort") String likeCount) {
-        return postService.findPosts(pageable, likeCount);
+        return postService.findPosts(page, likeCount);
     }
 
     @PatchMapping("/{postId}")

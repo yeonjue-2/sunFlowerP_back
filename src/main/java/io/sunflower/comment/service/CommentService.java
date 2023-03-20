@@ -12,6 +12,7 @@ import io.sunflower.post.entity.Post;
 import io.sunflower.post.service.PostService;
 import io.sunflower.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static io.sunflower.common.constant.PagingConstant.DEFAULT_PAGE_SIZE;
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
 @Service
@@ -54,8 +56,9 @@ public class CommentService {
         return CommentResponse.of(comment);
     }
 
-    public Slice<CommentResponse> findComments(Long postId, Pageable pageable) {
-        Slice<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId, pageable);
+    public Slice<CommentResponse> findComments(Long postId, int page) {
+        Pageable pageable = PageRequest.of(page-1, DEFAULT_PAGE_SIZE);
+        Slice<Comment> comments = commentRepository.findAllByPostIdOrderByIdDesc(postId, pageable);
 
         return comments.map(CommentResponse::of);
     }

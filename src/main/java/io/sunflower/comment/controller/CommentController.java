@@ -45,8 +45,8 @@ public class CommentController {
     @GetMapping("/{postId}/comment/")
     @ResponseStatus(HttpStatus.OK)
     public Slice<CommentResponse> readComments(@PathVariable Long postId,
-                                               @PageableDefault(size = 15) Pageable pageable) {
-        return commentService.findComments(postId, pageable);
+                                               @RequestParam("page") int page) {
+        return commentService.findComments(postId, page);
 
     }
 

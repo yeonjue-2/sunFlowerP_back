@@ -46,17 +46,5 @@ public class SwaggerConfig {
         produces.add("application/json;charset=UTF-8");
         return produces;
     }
-
-    // driver-class-name: com.mysql.cj.jdbc.Driver
-    // url: jdbc:mysql://localhost:3306/sunflower?serverTimezone=UTC&characterEncoding=UTF-8
-    //    username: root
-    //    password: 1234
-
-//    driver-class-name: com.mysql.cj.jdbc.Driver
-//    url: jdbc:mysql://sunflower-db.cvmzekcc6vfq.ap-northeast-2.rds.amazonaws.com:3306/sunflower_database?serverTimezone=UTC&characterEncoding=UTF-8
-//    username: admin
-//    password: sunflower
-
-    // database: sql_server
 }
 

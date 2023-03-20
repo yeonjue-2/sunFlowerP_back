@@ -26,7 +26,7 @@ public class PostDetailResponse {
     private String nickname;
     private String userImageUrl;
     private List<String> postImageUrls;
-    private List<CommentResponse> comments;
+//    private List<CommentResponse> comments;
     private int likeCount;
     private LocalDateTime createAt;
 
@@ -63,10 +63,10 @@ public class PostDetailResponse {
         postImageUrls = post.getPostImages().stream()
                 .map(PostImage::getPostImageUrl)
                 .collect(Collectors.toList());
-        comments = post.getComments().stream()
-                .sorted(Comparator.comparing(Comment::getId).reversed())
-                .map(CommentResponse::of)
-                .collect(Collectors.toList());
+//        comments = post.getComments().stream()
+//                .sorted(Comparator.comparing(Comment::getId).reversed())
+//                .map(CommentResponse::of)
+//                .collect(Collectors.toList());
         this.likeCount = post.getLikeCount();
     }
 }

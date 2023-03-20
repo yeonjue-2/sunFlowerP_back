@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static io.sunflower.common.constant.PagingConstant.DEFAULT_PAGE_SIZE;
 import static io.sunflower.common.exception.ExceptionStatus.*;
 
 
@@ -36,32 +37,34 @@ public class PostService {
         return new PostDetailResponse(post);
     }
 
-    public Slice<PostResponse> findPosts(Pageable pageable, String likeCount) {
+    public Slice<PostResponse> findPosts(int page, String likeCount) {
+
         Slice<Post> posts;
+        Pageable pageable = PageRequest.of(page-1, DEFAULT_PAGE_SIZE);
 
         if (likeCount != null) {
-            pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "likeCount"));
+            pageable = PageRequest.of(page-1, DEFAULT_PAGE_SIZE, Sort.by(Sort.Order.desc(likeCount), Sort.Order.desc("id")));
             posts = postRepository.findAll(pageable);
 
             return posts.map(PostResponse::new);
         }
 
-        posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        posts = postRepository.findAllByOrderByIdDesc(pageable);
         return posts.map(PostResponse::new);
     }
 
-    public Slice<PostResponse> searchPosts(Pageable pageable, String keyword, String likeCount) {
+    public Slice<PostResponse> searchPosts(int page, String keyword, String likeCount) {
         Slice<Post> posts;
-//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+        Pageable pageable = PageRequest.of(page-1, DEFAULT_PAGE_SIZE);
 
         if (likeCount != null) {
-            pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "likeCount"));
+            pageable = PageRequest.of(page-1, DEFAULT_PAGE_SIZE, Sort.by(Sort.Order.desc(likeCount), Sort.Order.desc("id")));
             posts = postRepository.findByMenuListContaining(keyword, pageable);
 
             return posts.map(PostResponse::new);
         }
 
-        posts = postRepository.findByMenuListContainingOrderByCreatedAtDesc(keyword, pageable);
+        posts = postRepository.findByMenuListContainingOrderByIdDesc(keyword, pageable);
         return posts.map(PostResponse::new);
     }
 
