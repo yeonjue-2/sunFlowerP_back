@@ -69,7 +69,7 @@ public class AuthService {
 
         response.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + tokenDto.getAccessToken());
 
-        return LoginResponse.of(user.getEmailId(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+        return LoginResponse.of(user.getNickname(), tokenDto.getAccessToken(), tokenDto.getRefreshToken());
     }
 
     @Transactional

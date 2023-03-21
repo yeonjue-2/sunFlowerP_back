@@ -1,7 +1,5 @@
 package io.sunflower.post.dto;
 
-import io.sunflower.post.entity.Post;
-import io.sunflower.user.entity.User;
 import io.sunflower.common.enumeration.MealCountEnum;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -26,17 +24,4 @@ public class PostRequest {
 
     @Size(max=4, message = "* 이미지는 최대 4장까지 업로드 가능합니다.")
     private List<MultipartFile> files;
-
-//    public Post toEntity(User user) {
-//        return Post.builder()
-//                .postContents(this.getPostContents())
-//                .menuList(this.getMenuList())
-//                .mealCount(this.getMealCount())
-//                .nuCarbs(this.getNuCarbs())
-//                .nuProtein(this.getNuProtein())
-//                .nuFat(this.getNuFat())
-//                .nuKcal(this.getNuKcal())
-//                .user(user)
-//                .build();
-//    }
 }

@@ -52,12 +52,14 @@ public class WebSecurityConfig {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/update-passwords/**").permitAll()
+                .antMatchers("/reissue-passwords/**").permitAll()
                 .antMatchers("/search-nutritions/**").permitAll()
+                .antMatchers("/search-posts/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisUtil), UsernamePasswordAuthenticationFilter.class);
 
-//        http.formLogin();
-//
 //        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
         return http.build();

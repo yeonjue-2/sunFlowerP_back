@@ -6,8 +6,6 @@ import io.sunflower.comment.entity.Comment;
 import io.sunflower.comment.repository.CommentRepository;
 import io.sunflower.common.exception.model.InvalidAccessException;
 import io.sunflower.common.exception.model.NotFoundException;
-import io.sunflower.post.dto.PostDetailResponse;
-import io.sunflower.post.dto.PostRequest;
 import io.sunflower.post.entity.Post;
 import io.sunflower.post.service.PostService;
 import io.sunflower.user.entity.User;
@@ -15,14 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static io.sunflower.common.constant.PagingConstant.DEFAULT_PAGE_SIZE;
 import static io.sunflower.common.exception.ExceptionStatus.*;

@@ -53,17 +53,4 @@ public class ExceptionAdvice {
         log.error(e.getMessage());
         return new ExceptionResponse(e.getCode(), e.getMessage());
     }
-
-// TO-DO
-    // ========= 커스텀 익셉션 외 예외 처리 ==========
-
-//    @ExceptionHandler({IOException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    protected ExceptionResponse IoStreamException(CustomException ex) {
-//        ex.printStackTrace();
-//        log.error(ex.getMessage());
-//        return new ExceptionResponse(ex.getExceptionStatus().getStatusCode(),
-//                ex.getExceptionStatus().getMessage());
-//    }
-
 }

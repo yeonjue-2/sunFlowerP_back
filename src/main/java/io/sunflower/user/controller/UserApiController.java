@@ -1,7 +1,6 @@
 package io.sunflower.user.controller;
 
 
-import com.amazonaws.services.ec2.model.UserData;
 import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.user.dto.UserModalInfoResponse;

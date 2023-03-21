@@ -46,7 +46,7 @@ public class AuthApiController {
      * @param code: 카카오 서버로부터 받은 인가 코드
      * @return response body에 정보 채워서 전달
      * https://kauth.kakao.com/oauth/authorize?client_id=86483f30e78c6016d89913f11cd358ce&
-     * redirect_uri=http://localhost:8080/api/auth/kakao/callback&response_type=code
+     * redirect_uri=http://localhost:3000/api/auth/kakao/callback&response_type=code
      */
     @GetMapping("/kakao/callback")
     @ResponseStatus(HttpStatus.OK)

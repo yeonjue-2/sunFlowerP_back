@@ -1,12 +1,10 @@
 package io.sunflower.post.dto;
 
-import io.sunflower.comment.dto.CommentResponse;
 import io.sunflower.post.entity.Post;
-import io.sunflower.post.entity.PostImage;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
+
 
 @Getter
 public class PostResponse {

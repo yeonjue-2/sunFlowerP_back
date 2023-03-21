@@ -11,7 +11,6 @@ public class UserModalInfoResponse {
     private UserGenderEnum gender;
     private String userImageUrl;
 
-
     public UserModalInfoResponse(User user) {
         this.nickname = user.getNickname();
         this.userContents = user.getUserContents();
