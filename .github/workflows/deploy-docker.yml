@@ -1,107 +1,100 @@
-#name: Deploy to Amazon EC2
-#
-#on:
-#  push:
-#    branches: [ "main" ]
-#
-## 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
-#env:
-#  AWS_REGION: ap-northeast-2
-#  RESOURCE_PATH: ./src/main/resources/application.yml
-#  S3_BUCKET_NAME: sunflower-github-actions-s3-bucket
-#  CODE_DEPLOY_APPLICATION_NAME: sunflower-codedeploy-app
-#  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: sunflower-codedeploy-deployment-group
-#
-#permissions:
-#  contents: read
-#
-#jobs:
-#  deploy:
-#    name: Deploy
-#    runs-on: ubuntu-latest
-#    environment: production
-#
-#    steps:
-#      # (1) 기본 체크아웃
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      # (2) JDK 11 세팅
-#      - name: Set up JDK 11
-#        uses: actions/setup-java@v3
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+# 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
+env:
+  AWS_REGION: ap-northeast-2
+  RESOURCE_PATH: ./src/main/resources/application.yml
+  S3_BUCKET_NAME: sunflower-github-actions-s3-bucket
+  CODE_DEPLOY_APPLICATION_NAME: sunflower-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: sunflower-codedeploy-deployment-group
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # (1) 기본 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # (2) JDK 11 세팅
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+#      - name: Gradle Caching
+#        uses: actions/cache@v3
 #        with:
-#          distribution: 'temurin'
-#          java-version: '11'
-#
-#      # yaml 파일 생성
-#      - uses: actions/checkout@v2
-#      - run: mkdir ./src/main/resources
-#      - run: touch ./src/main/resources/application.yml
-#      - run: echo "${{ secrets.APPLICATION }}" | base64 --decode > ./src/main/resources/application.yml
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: application.yml
-#          path: ./src/main/resources/application.yml
-#
-#      - run: touch ./src/main/resources/application-s3.yml
-#      - run: echo "${{ secrets.APPLICATION_S3 }}" | base64 --decode > ./src/main/resources/application-s3.yml
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: application-s3.yml
-#          path: ./src/main/resources/application-s3.yml
-#
-#      # (3) Gradle build (Test 제외)
-#      - name: Build with Gradle
-#        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-#        with:
-#          arguments: clean build -x test
-#
-#      # docker 설치 및 이미지 생성
-#      - name: Install Docker
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
-#          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-#          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-#          sudo apt-get update
-#          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          push: true
-#          tags: my-repo/my-image:${{ github.sha }}
-#
-#      - name: Install Docker Compose
-#        run: |
-#          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#          sudo chmod +x /usr/local/bin/docker-compose
-#
-#
-#
-#      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ env.AWS_REGION }}
-#
-#      # (5) 빌드 결과물을 S3 버킷에 업로드
-#      - name: Upload to AWS S3
-#        run: |
-#          aws deploy push \
-#            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-#            --ignore-hidden-files \
-#            --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
-#            --source .
-#
-#      # (6) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
-#      - name: Deploy to AWS EC2 from S3
-#        run: |
-#          aws deploy create-deployment \
-#            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-#            --deployment-config-name CodeDeployDefault.AllAtOnce \
-#            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-#            --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+
+      - name: Make yaml
+      - uses: actions/checkout@v2
+      - run: mkdir ./src/main/resources
+      - run: touch ./src/main/resources/application.yml
+      - run: echo "${{ secrets.APPLICATION }}" | base64 --decode > ./src/main/resources/application.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: application.yml
+          path: ./src/main/resources/application.yml
+
+      - run: touch ./src/main/resources/application-s3.yml
+      - run: echo "${{ secrets.APPLICATION_S3 }}" | base64 --decode > ./src/main/resources/application-s3.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: application-s3.yml
+          path: ./src/main/resources/application-s3.yml
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Make zip file
+        run: |
+          mkdir deploy
+          cp ./build/libs/*.jar ./deploy/
+          zip -r -qq -j ./sunflower-build.zip ./deploy
+
+      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # (5) 빌드 결과물을 S3 버킷에 업로드
+      - name: Upload to AWS S3
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source .
+
+      # (6) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
+      - name: Deploy to AWS EC2 from S3
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip, key=sunflower-build.zip
