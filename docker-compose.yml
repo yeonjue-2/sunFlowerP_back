@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_REDIS_HOST: redis
+    depends_on:
+      - redis
