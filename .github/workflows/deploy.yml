@@ -62,22 +62,8 @@ jobs:
       - name: Install Docker and Redis
         run: |
           sudo apt-get update
-          sudo apt-get install apt
-          
-          sudo apt update
-          sudo apt install apt-transport-https
-          sudo apt install ca-certificates
-          sudo apt install curl
-          sudo apt install software-properties-common
-          
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-          sudo apt update
-          
-          apt-cache policy docker-ce
-          sudo apt install docker-ce
-          
-          docker pull redis
+          sudo apt-get upgrade
+          sudo apt-get install docker.io
 
       - name: Build and push Docker image
         run: |
