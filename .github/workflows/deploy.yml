@@ -61,6 +61,9 @@ jobs:
       # docker 설치
       - name: Install Docker and Redis
         run: |
+          sudo apt-get update
+          sudo apt-get install apt
+          
           sudo apt update
           sudo apt install apt-transport-https
           sudo apt install ca-certificates
