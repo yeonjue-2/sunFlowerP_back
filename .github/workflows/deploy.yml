@@ -50,12 +50,6 @@ jobs:
           name: application-s3.yml
           path: ./src/main/resources/application-s3.yml
 
-      # (4) Gradle build (Test 제외)
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          arguments: clean build -x test
-
       # (5) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -63,6 +57,18 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      # docker 설치
+      - name: Install Docker and Redis
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          docker pull redis
+
+      - name: Build and push Docker image
+        run: |
+          docker-compose build
+          docker-compose push
 
       # (6) 빌드 결과물을 S3 버킷에 업로드
       - name: Upload to AWS S3
