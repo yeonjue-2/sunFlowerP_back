@@ -63,6 +63,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get upgrade
+          
+          sudo apt-get remove docker docker-engine docker.io containerd runc
+          
           sudo apt-get install docker.io
 
       - name: Build and push Docker image
