@@ -7,6 +7,8 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    networks:
+      - sunflower-network
 
   app:
     build: .
@@ -17,3 +19,8 @@ services:
       SPRING_REDIS_HOST: redis
     depends_on:
       - redis
+    networks:
+      - sunflower-network
+
+networks:
+  - sunflower-network:
