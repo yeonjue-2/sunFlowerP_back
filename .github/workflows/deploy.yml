@@ -2,15 +2,14 @@ name: Deploy to Amazon EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 # 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
 env:
   AWS_REGION: ap-northeast-2
-  RESOURCE_PATH: ./src/main/resources/application.yml
-  S3_BUCKET_NAME: sunflower-github-actions-s3-bucket
-  CODE_DEPLOY_APPLICATION_NAME: sunflower-codedeploy-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: sunflower-codedeploy-deployment-group
+  ECR_REPO_NAME: sunflower-ecr-repo
+  IMAGE_TAG: $(echo $GITHUB_SHA | cut -c1-7)
 
 permissions:
   contents: read
@@ -33,45 +32,38 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      # (3) 필요한 yml 파일 만들기
-      - uses: actions/checkout@v2
-      - run: mkdir ./src/main/resources
-      - run: touch ./src/main/resources/application.yml
-      - run: echo "${{ secrets.APPLICATION }}" | base64 --decode > ./src/main/resources/application.yml
-      - uses: actions/upload-artifact@v2
-        with:
-          name: application.yml
-          path: ./src/main/resources/application.yml
+      - name: Login to AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - run: touch ./src/main/resources/application-s3.yml
-      - run: echo "${{ secrets.APPLICATION_S3 }}" | base64 --decode > ./src/main/resources/application-s3.yml
-      - uses: actions/upload-artifact@v2
-        with:
-          name: application-s3.yml
-          path: ./src/main/resources/application-s3.yml
-
-      # (5) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      # (6) 빌드 결과물을 S3 버킷에 업로드
-      - name: Upload to AWS S3
+      - name: Build and push Docker images
         run: |
-          aws deploy push \
-            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-            --ignore-hidden-files \
-            --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
-            --source .
+          # Set environment variables
+          export DOCKER_BUILDKIT=1
+          export COMPOSE_DOCKER_CLI_BUILD=1
+          
+          # Build and push Docker images
+          docker-compose build
+          docker tag sunflower-image:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}
 
-      # (7) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
-      - name: Deploy to AWS EC2 from S3
-        run: |
-          aws deploy create-deployment \
-            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-            --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-            --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
+      - name: SSH into EC2 and pull Docker images
+        uses: appleboy/ssh-action@v0.4.0
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Pull Docker images
+            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: SSH into EC2 and restart Docker containers
+        uses: appleboy/ssh-action@v0.4.0
+        with:
+          host: ${{ secrets.AWS_HOST }}
+            username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Restart Docker containers
+            docker-compose down
+            docker-compose up -d
