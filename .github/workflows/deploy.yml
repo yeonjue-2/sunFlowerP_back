@@ -58,23 +58,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      # docker 설치
-      - name: Install Docker and Redis
-        run: |
-          sudo apt-get update
-          sudo apt-get upgrade
-          
-          sudo apt-get remove docker docker-engine docker.io containerd runc
-          
-          sudo apt-get install aptitude
-          sudo aptitude install docker.io
-  
-
-      - name: Build and push Docker image
-        run: |
-          docker-compose build
-          docker-compose push
-
       # (6) 빌드 결과물을 S3 버킷에 업로드
       - name: Upload to AWS S3
         run: |
