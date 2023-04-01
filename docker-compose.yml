@@ -23,4 +23,4 @@ services:
       - sunflower-network
 
 networks:
-  - sunflower-network:
+  sunflower-network:
