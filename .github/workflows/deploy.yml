@@ -117,13 +117,13 @@ jobs:
           #            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
           #            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
 
-          - name: SSH into EC2 and restart Docker containers
-            uses: appleboy/ssh-action@master
-            with:
-              host: ${{ secrets.AWS_HOST }}
-              username: ${{ secrets.AWS_USERNAME }}
-              key: ${{ secrets.SSH_PRIVATE_KEY }}
-              script: |
-                # Restart Docker containers
-                docker-compose down
-                docker-compose up -d
+      - name: SSH into EC2 and restart Docker containers
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Restart Docker containers
+            docker-compose down
+            docker-compose up -d
