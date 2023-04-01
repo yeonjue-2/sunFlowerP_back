@@ -43,6 +43,25 @@ jobs:
       - name: Login to AWS ECR
         uses: aws-actions/amazon-ecr-login@v1
 
+      - uses: actions/checkout@v2
+      - run: mkdir ./src/main/resources
+      - run: touch ./src/main/resources/application.yml
+      - run: echo "${{ secrets.APPLICATION }}" | base64 --decode > ./src/main/resources/application.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: application.yml
+          path: ./src/main/resources/application.yml
+
+      - run: touch ./src/main/resources/application-s3.yml
+      - run: echo "${{ secrets.APPLICATION_S3 }}" | base64 --decode > ./src/main/resources/application-s3.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: application-s3.yml
+          path: ./src/main/resources/application-s3.yml
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
       - name: Build and push Docker images
         run: |
           # Set environment variables

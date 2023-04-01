@@ -11,7 +11,7 @@ WORKDIR /app
 RUN chmod -R 777 /app
 
 # Jar 파일 복사
-COPY build/libs/sunflower-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/sunflower-0.0.1-SNAPSHOT.jar /app
 
 # 컨테이너 실행
 CMD ["java", "-jar", "sunflower-0.0.1-SNAPSHOT.jar"]
