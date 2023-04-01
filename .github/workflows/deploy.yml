@@ -10,7 +10,7 @@ env:
   AWS_REGION: ap-northeast-2
   SOURCE_IMAGE: app
   ECR_REPO_NAME: sunflower-ecr-repo
-  IMAGE_TAG: $(echo $GITHUB_SHA | cut -c1-7)
+  IMAGE_TAG: $(date '+%Y%m%d-%H%M%S')
 
 permissions:
   contents: read
