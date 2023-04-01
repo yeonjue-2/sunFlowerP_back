@@ -70,9 +70,10 @@ jobs:
           export COMPOSE_DOCKER_CLI_BUILD=1
           
           # Build and push Docker images
+          
           docker-compose build
-          docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(echo $GITHUB_SHA | cut -c1-7)
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(echo $GITHUB_SHA | cut -c1-7)
+          docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
 
       - name: SSH into EC2 and pull Docker images
         uses: appleboy/ssh-action@master
