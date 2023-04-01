@@ -75,6 +75,17 @@ jobs:
           docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
 
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: SSH into EC2 and pull Docker images
         uses: appleboy/ssh-action@master
         with:
@@ -83,21 +94,36 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Pull Docker images
-            # Install AWS CLI
-            sudo apt-get update && sudo apt-get install -y awscli
-            # Get ECR login credentials and log in to Docker
-            $(aws ecr get-login --no-include-email --region ${{ env.AWS_REGION }})
+            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws configure set default.region ${{ env.AWS_REGION }}
+            aws ecr get-login-password | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
-#            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-#            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
 
-      - name: SSH into EC2 and restart Docker containers
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Restart Docker containers
-            docker-compose down
-            docker-compose up -d
+
+#          - name: SSH into EC2 and pull Docker images
+#            uses: appleboy/ssh-action@master
+#            with:
+#              host: ${{ secrets.AWS_HOST }}
+#              username: ${{ secrets.AWS_USERNAME }}
+#              key: ${{ secrets.SSH_PRIVATE_KEY }}
+#              script: |
+#                # Pull Docker images
+#                # Install AWS CLI
+#                sudo apt-get update && sudo apt-get install -y awscli
+#                # Get ECR login credentials and log in to Docker
+#                $(aws ecr get-login --no-include-email --region ${{ env.AWS_REGION }})
+#                docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
+          #            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          #            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
+
+          - name: SSH into EC2 and restart Docker containers
+            uses: appleboy/ssh-action@master
+            with:
+              host: ${{ secrets.AWS_HOST }}
+              username: ${{ secrets.AWS_USERNAME }}
+              key: ${{ secrets.SSH_PRIVATE_KEY }}
+              script: |
+                # Restart Docker containers
+                docker-compose down
+                docker-compose up -d
