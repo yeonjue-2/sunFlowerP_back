@@ -8,7 +8,7 @@ services:
       - "6379:6379"
     restart: always
     networks:
-      sunflower-network:
+      - sunflower-network
 
   app:
     build: .
@@ -21,7 +21,7 @@ services:
     depends_on:
       - redis
     networks:
-      sunflower-network:
+      - sunflower-network
 
 networks:
   sunflower-network:
