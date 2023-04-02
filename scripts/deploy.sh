@@ -28,7 +28,7 @@ then
   sudo chmod +x /usr/local/bin/docker-compose
 fi
 
-echo "start docker-compose up: ubuntu"
+echo "start docker-compose up: aws_username"
 sudo docker-compose -f /home/ubuntu/app/docker-compose.yml up --build -d
 
 #echo "> 현재 실행 중인 Docker 컨테이너 pid 확인 " >> /home/ubuntu/deploy.log
