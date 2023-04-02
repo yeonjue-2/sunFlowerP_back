@@ -60,7 +60,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtTokenProvider, redisUtil), UsernamePasswordAuthenticationFilter.class);
 
-//        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
+        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
 
         return http.build();
     }

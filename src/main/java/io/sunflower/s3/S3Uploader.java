@@ -2,7 +2,6 @@ package io.sunflower.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import io.sunflower.common.exception.ExceptionStatus;
@@ -175,7 +174,6 @@ public class S3Uploader {
         }
     }
 
-
     public void checkFileUpload(List<MultipartFile> files) {
         checkByFileCount(files);
         checkFilesExtension(files);
@@ -192,5 +190,4 @@ public class S3Uploader {
             amazonS3Client.deleteObject(bucket, imageKey);
         }
     }
-
 }

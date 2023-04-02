@@ -147,10 +147,6 @@ public class KakaoService {
             userRepository.save(kakaoUser);
         }
 
-        // TO-DO
-        // Redis - 로그인시 {email: refreshToken} 으로 저장
-//        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_TIME);
-
         return kakaoUser;
     }
 

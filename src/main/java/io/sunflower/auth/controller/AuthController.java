@@ -2,11 +2,9 @@ package io.sunflower.auth.controller;
 
 import io.sunflower.auth.dto.LoginResponse;
 import io.sunflower.auth.dto.ReissueResponse;
-import io.sunflower.kakao.KakaoService;
 import io.sunflower.auth.dto.LoginRequest;
 import io.sunflower.auth.dto.SignupRequest;
 import io.sunflower.auth.service.AuthService;
-import io.sunflower.s3.S3Uploader;
 import io.sunflower.security.UserDetailsImpl;
 import io.sunflower.security.jwt.dto.TokenRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 
 import static io.sunflower.common.constant.UserConst.*;
 

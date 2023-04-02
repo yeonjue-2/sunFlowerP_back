@@ -64,7 +64,9 @@ public class EmailService {
         return message;
     }
 
-    // 인증코드 만들기
+    /**
+     * 인증코드 만드는 로직
+     */
     public static String createKey() {
         StringBuilder key = new StringBuilder();
         Random random = new Random();

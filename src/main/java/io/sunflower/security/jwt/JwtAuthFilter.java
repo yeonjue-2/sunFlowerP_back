@@ -65,7 +65,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error(e.getMessage());
         }
     }
-
-    // TO-DO SecurityExceptionDto -> ExceptionResponse ?
-
 }

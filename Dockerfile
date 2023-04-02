@@ -15,9 +15,3 @@ COPY build/libs/sunflower-0.0.1-SNAPSHOT.jar /app
 
 # 컨테이너 실행
 CMD ["java", "-jar", "sunflower-0.0.1-SNAPSHOT.jar"]
-
-
-#FROM adoptopenjdk/openjdk11
-#ENV TZ=Asia/Seoul
-#COPY build/libs/sunflower-0.0.1-SNAPSHOT.jar app.jar
-#ENTRYPOINT ["java", "-jar","/app.jar"]
