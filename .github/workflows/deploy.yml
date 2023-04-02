@@ -82,7 +82,7 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            ****sh /home/ubuntu/app/scripts/deploy.sh
+            /bin/bash /home/ubuntu/app/scripts/deploy.sh
 
 #          - name: SSH into EC2 and pull Docker images
 #            uses: appleboy/ssh-action@master
