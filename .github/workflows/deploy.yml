@@ -72,11 +72,17 @@ jobs:
           # Build and push Docker images
           
           docker-compose build
-          docker-compose up -d
           docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
-          
-                   
+
+      - name: SSH into EC2 and pull Docker images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            ****sh /home/ubuntu/app/scripts/deploy.sh
 
 #          - name: SSH into EC2 and pull Docker images
 #            uses: appleboy/ssh-action@master
