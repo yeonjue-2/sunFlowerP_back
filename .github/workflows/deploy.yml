@@ -72,30 +72,8 @@ jobs:
           # Build and push Docker images
           
           docker-compose build
+          docker-compose -f /home/${{ secrets.AWS_USERNAME }}/app/docker-compose.yml up --build -d
           docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
-
-      - name: SSH into EC2 and pull Docker images
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            /bin/bash /home/${{ secrets.AWS_USERNAME }}/app/scripts/deploy.sh
-
-#          - name: SSH into EC2 and pull Docker images
-#            uses: appleboy/ssh-action@master
-#            with:
-#              host: ${{ secrets.AWS_HOST }}
-#              username: ${{ secrets.AWS_USERNAME }}
-#              key: ${{ secrets.SSH_PRIVATE_KEY }}
-#              script: |
-#                # Pull Docker images
-#                # Install AWS CLI
-#                sudo apt-get update && sudo apt-get install -y awscli
-#                # Get ECR login credentials and log in to Docker
-#                $(aws ecr get-login --no-include-email --region ${{ env.AWS_REGION }})
-#                docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
-          #            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          #            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
+          
+     

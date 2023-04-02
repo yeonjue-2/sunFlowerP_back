@@ -8,13 +8,7 @@ services:
       - "6379:6379"
     restart: always
     networks:
-      sunflower-network:
-        driver: bridge
-        ipam:
-          driver: default
-          config:
-            - subnet: 172.16.238.0/24
-
+      - sunflower-network
 
   app:
     build: .
@@ -27,12 +21,12 @@ services:
     depends_on:
       - redis
     networks:
-      sunflower-network:
-        driver: bridge
-        ipam:
-          driver: default
-          config:
-            - subnet: 172.16.238.0/24
+      - sunflower-network
 
 networks:
   sunflower-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
