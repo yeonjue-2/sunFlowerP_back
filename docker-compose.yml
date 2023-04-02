@@ -9,7 +9,6 @@ services:
     restart: always
     networks:
       sunflower-network:
-        ipv4_address: 172.16.238.10
 
   app:
     build: .
@@ -23,7 +22,6 @@ services:
       - redis
     networks:
       sunflower-network:
-        ipv4_address: 172.16.238.10
 
 networks:
   sunflower-network:
