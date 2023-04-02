@@ -85,6 +85,7 @@ jobs:
             # Pull Docker images
             sudo apt-get update
             sudo apt-get upgrade openssl
+            docker run -it --rm docker:stable /bin/bash
             aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
             docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')                   
 
