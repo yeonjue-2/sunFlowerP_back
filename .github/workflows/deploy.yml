@@ -52,14 +52,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      # (5) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Login to AWS ECR
         uses: aws-actions/amazon-ecr-login@v1
 
@@ -72,30 +64,31 @@ jobs:
           # Build and push Docker images
           
           docker-compose build
+          docker-compose -f ./docker-compose.yml up --build -d
           docker tag ${{ env.SOURCE_IMAGE }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
 
-      - name: SSH into EC2 and pull Docker images
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Pull Docker images
-            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
-
-      - name: SSH into EC2 and restart Docker containers
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Restart Docker containers
-            docker-compose down
-            docker-compose up -d
+#      - name: SSH into EC2 and pull Docker images
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.AWS_HOST }}
+#          username: ${{ secrets.AWS_USERNAME }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: |
+#            # Pull Docker images
+#            docker login -u AWS -p $(aws ecr get-login-password --region ${{ env.AWS_REGION }}) ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+#            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO_NAME }}:$(date '+%Y%m%d-%H%M%S')
+#
+#      - name: SSH into EC2 and restart Docker containers
+#        uses: appleboy/ssh-action@v0.4.0
+#        with:
+#          host: ${{ secrets.AWS_HOST }}
+#          username: ${{ secrets.AWS_USERNAME }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: |
+#            # Restart Docker containers
+#            docker-compose down
+#            docker-compose up -d
 
 #      # (5) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
 #      - name: Configure AWS credentials
