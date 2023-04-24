@@ -3,12 +3,15 @@
 </br>
 
 - [프로젝트 개요](#1.프로젝트-개요)
+- [프로젝트 목표 및 주요 기능](#2.프로젝트-목-및-주요-기능)
+- [기술 스택](#3.기술-스택)
+- [ERD 설계 및 서비스 아키텍쳐](#4.ERD-설계-및-서비스-아키텍쳐)
+- [프로젝트 시연](#1.프로젝트-시연)
+- [트러블 슈팅](#6.트러블-슈팅)
 
 
 ## 1.프로젝트 개요
 > 여러 사람과 공유하고 영양정보를 정리하며 식단을 관리하는 '식단 관리 SNS'
-
->배운 것을 최대한 활용하며 시간이 걸리더라도 혼자서 기획부터 배포까지 모든 것을 경험해보고 싶었습니다. 모든 것을 혼자 결정하는만큼 성능향상과 개발에 도움이 되는 방법들을 고민하며 서비스에 적용해보고자 하였습니다.
 - 팀 명 : 해바라기
 - 프로젝트 명 : 오태식(오늘 우리가 택한 식단)
 - 개발 기간 : 2023.02.13 - 03.31
@@ -18,7 +21,7 @@
 
 ## 2. 프로젝트 목표 및 주요 기능
 #### 목표
-- 적은 인원이지만 공부해나가며 원하는 서비스를 제공하기
+- 도전적으로 구현하며 원하는 서비스를 제공하기
 - open API를 활용하여 정확한 정보를 전달하기
 - Redis, Docker 등의 기술 사용 및 비교하기
 - API 문서화, 규칙적인 스크럼 등을 통해 협업하기
@@ -32,29 +35,32 @@
 </br>
 
 ## 3. 기술 스택
-## ☕ 기술 스택
-  | BE | <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Spring Data JPA-7A1FA2?style=for-the-badge&logo=Spring Data JPA&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>  <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"> <img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white"/>|
+  | **BE** | <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Spring Data JPA-7A1FA2?style=for-the-badge&logo=Spring Data JPA&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>  <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"> <img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white"/>|
   | :--- | :---- |
-  | CLOUD | <img src="https://img.shields.io/badge/Amazon AWS-232F32?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white"/>  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon%20RDS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon ECR-FF9900?style=for-the-badge&logo=Amazon%20ECS&logoColor=white"/> |
-  | ETC | <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white"/> <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=github actions&logoColor=white"/>|
+  | **CLOUD** | <img src="https://img.shields.io/badge/Amazon AWS-232F32?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white"/>  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon%20RDS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon ECR-FF9900?style=for-the-badge&logo=Amazon%20ECS&logoColor=white"/> |
+  | **ETC** | <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white"/> <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=github actions&logoColor=white"/>|
 </br>
 
-## 4. ERD 설계 및 API 명세
-- **ERD 설계**
->![SunFlower](https://user-images.githubusercontent.com/101540771/229546930-428cfaa0-91f4-40f6-a6cf-efc00a347220.png)
+## 4. ERD 설계 및 서비스 아키텍쳐
 </br>
 
-- **API 명세**
-노션페이지 연결
+**ERD 설계**
+
+![SunFlower](https://user-images.githubusercontent.com/101540771/229546930-428cfaa0-91f4-40f6-a6cf-efc00a347220.png)
+</br>
 </br>
 
-## 5. 아키텍쳐
+**아키텍쳐**
+</br>
+</br>
+<img width="926" alt="스크린샷 2023-04-24 오후 10 50 05" src="https://user-images.githubusercontent.com/101540771/234018027-dc066820-9d92-4e8f-b04e-b1bde137690a.png">
+
 </br>
 
-## 6. 프로젝트 시연
+## 5. 프로젝트 시연
 - 준비중 ㆍㆍㆍ
 </br>
 
-## 7. 트러블 슈팅
+## 6. 트러블 슈팅
 </br>
 
