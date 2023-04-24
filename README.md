@@ -2,16 +2,16 @@
 <img width="880" alt="스크린샷 2023-04-07 오전 1 25 42" src="https://user-images.githubusercontent.com/101540771/230439621-d339f015-d7e4-4135-9b48-cded6400c87a.png">
 </br>
 
-- [프로젝트 개요](##1.프로젝트-개요)
-- [프로젝트 목표 및 주요 기능](#2.-프로젝트-목-및-주요-기능)
-- [기술 스택](#3.기술-스택)
-- [ERD 설계 및 서비스 아키텍쳐](#4.ERD-설계-및-서비스-아키텍쳐)
-- [프로젝트 시연](#5.프로젝트-시연)
-- [트러블 슈팅](#6.트러블-슈팅)
+- [프로젝트 개요](#프로젝트-개요)
+- [프로젝트 목표 및 주요 기능](#프로젝트-목표-및-주요-기능)
+- [기술 스택](#기술-스택)
+- [ERD 설계 및 아키텍쳐](#ERD-설계-및-아키텍쳐)
+- [프로젝트 시연](#프로젝트-시연)
+- [트러블 슈팅](#트러블-슈팅)
 
 </br>
 
-## 1.프로젝트 개요
+## 프로젝트 개요
 > 여러 사람과 공유하고 영양정보를 정리하며 식단을 관리하는 '식단 관리 SNS'
 - 팀 명 : 해바라기
 - 프로젝트 명 : 오태식(오늘 우리가 택한 식단)
@@ -20,7 +20,7 @@
 </br>
 </br>
 
-## 2.프로젝트 목표 및 주요 기능
+## 프로젝트 목표 및 주요 기능
 #### 목표
 - 도전적으로 구현하며 원하는 서비스를 제공하기
 - open API를 활용하여 정확한 정보를 전달하기
@@ -35,14 +35,15 @@
 - 영양성분 검색
 </br>
 
-## 3. 기술 스택
+## 기술 스택
   | **BE** | <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Spring Data JPA-7A1FA2?style=for-the-badge&logo=Spring Data JPA&logoColor=white"> <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"/>  <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"> <img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white"/>|
   | :--- | :---- |
   | **CLOUD** | <img src="https://img.shields.io/badge/Amazon AWS-232F32?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white"/>  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon%20RDS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon ECR-FF9900?style=for-the-badge&logo=Amazon%20ECS&logoColor=white"/> |
   | **ETC** | <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white"/> <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=github actions&logoColor=white"/>|
 </br>
 
-## 4. ERD 설계 및 서비스 아키텍쳐
+## ERD 설계 및 아키텍쳐
+
 </br>
 
 **ERD 설계**
@@ -58,10 +59,10 @@
 
 </br>
 
-## 5. 프로젝트 시연
+## 프로젝트 시연
 - 준비중 ㆍㆍㆍ
 </br>
 
-## 6. 트러블 슈팅
+## 트러블 슈팅
 </br>
 
