@@ -48,8 +48,7 @@
 
 **ERD 설계**
 
-![SunFlower](https://user-images.githubusercontent.com/101540771/229546930-428cfaa0-91f4-40f6-a6cf-efc00a347220.png)
-</br>
+![SunFlower](https://user-images.githubusercontent.com/101540771/234029995-35467431-e51f-4693-bd25-657f938f6864.png)</br>
 </br>
 
 **아키텍쳐**
