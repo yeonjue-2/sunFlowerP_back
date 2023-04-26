@@ -41,7 +41,6 @@
   | **CLOUD** |<img src="https://img.shields.io/badge/AWS S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white"/>  <img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"/> <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-badge&logo=Amazon%20RDS&logoColor=white"/> <img src="https://img.shields.io/badge/AWS ECR-FF9900?style=for-the-badge&logo=Amazon%20ECS&logoColor=white"/> |
   | **ETC** | <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white"/> <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=github actions&logoColor=white"/>|
 </br>
-
 ## ERD 설계 및 아키텍쳐
 
 </br>
