@@ -59,7 +59,28 @@
 </br>
 
 ## 프로젝트 시연
-- 준비중 ㆍㆍㆍ
+<details>
+<summary>프로젝트 시연</summary>
+<div markdown="1">
+
+- 메인화면
+  <img width="927" alt="스크린샷 2023-08-05 오후 5 46 47" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/b89c8ef8-a6fc-46a2-89e1-489f8b50244a">
+- 회원가입 / 로그인
+  <img width="939" alt="스크린샷 2023-08-05 오후 5 48 01" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/92137185-2685-4172-aab3-a5d98051f6c6">
+- 이메일 인증 </p>
+  <img width="470" alt="스크린샷 2023-08-05 오후 5 49 04" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/27b0d2e0-0a12-4a28-a4d0-7a02aa370979">
+- 식품 영양 정보 검색 </p>
+  <img width="470" alt="스크린샷 2023-08-05 오후 5 50 42" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/d5719f33-a660-40b2-8f4e-d908a497b965">
+- 식단 공유하기 </p>
+  <img width="470" alt="스크린샷 2023-08-05 오후 5 51 45" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/d2733cff-a38a-4acc-b507-be1d386e4788">
+- 댓글, 좋아요 기능 </p>
+  <img width="470" alt="스크린샷 2023-08-05 오후 5 52 20" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/6a60896c-f246-4060-a71d-36af24dfd37b">
+- 포스트 내 검색 </p>
+  <img width="470" alt="스크린샷 2023-08-05 오후 5 52 48" src="https://github.com/yeonjue-2/sunFlowerP_back/assets/101540771/fd2dc01e-1526-41eb-808b-d51e475ef56c">
+
+</div>
+</details>
+
 </br>
 
 ## 트러블 슈팅
